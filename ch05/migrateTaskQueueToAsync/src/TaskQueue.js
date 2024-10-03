@@ -5,7 +5,7 @@ export class TaskQueue {
     this.queue = []
   }
 
-  runTask (task) {
+  runTask(task) {
     return new Promise((resolve, reject) => {
       this.queue.push(() => {
         return task().then(resolve, reject)
@@ -14,14 +14,16 @@ export class TaskQueue {
     })
   }
 
-  next () {
-    while (this.running < this.concurrency && this.queue.length) {
-      const task = this.queue.shift()
-      task().finally(() => {
-        this.running--
-        this.next()
-      })
-      this.running++
+  async next() {
+    while (this.running < this.concurrency && this.queue.length) { 
+      const task = this.queue.shift();
+      this.running++;
+      try {
+        await task();
+      } finally {
+        this.running--;
+        this.next();
+      }
     }
   }
 }

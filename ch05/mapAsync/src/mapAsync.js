@@ -20,15 +20,12 @@ export default async function mapAsync(iterable, callback, concurrency) {
   return result;
 }
 
-async function consumer(tasks, consumers) {
-  while (true) {
-    try {
-      const task = await nextTask(tasks, consumers);
-      await task();
-    } catch (err) {
-      console.log(err);
-    }
-  }    
+function consumer(tasks, consumers) {
+  nextTask(tasks, consumers)
+    .then((task) => {
+      task().catch(console.log);
+      consumer(tasks, consumers);
+    });
 };
 
 function nextTask(tasks, consumers) {
@@ -42,9 +39,9 @@ function nextTask(tasks, consumers) {
 function runTask(tasks, consumers, task) {
   return new Promise((resolve, reject) => {
     const taskWrapper = () => {
-      const promise = Promise.resolve().then(task);
-      promise.then(resolve, reject);
-      return promise;
+      return Promise.resolve()
+        .then(task)
+        .then(resolve, reject);
     };
 
     if (consumers.size !== 0) {

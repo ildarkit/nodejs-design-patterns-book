@@ -7,9 +7,10 @@ function* makeRangeIterator(start = 0, end = 1_000_000, step = 1) {
 }
 
 const start = performance.now();
-await mapAsync(
+const items = await mapAsync(
   [...makeRangeIterator()],
   (item) => item * 2,
-  1
+  4,
 );
 console.log(`time = ${performance.now() - start}`);
+console.log(items);

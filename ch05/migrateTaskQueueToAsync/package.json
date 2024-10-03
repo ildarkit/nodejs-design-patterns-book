@@ -1,0 +1,20 @@
+{
+  "name": "05-promises-web-spider-v4",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/spider-cli.js http://example.com 1 2"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "engineStrict": true,
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "mkdirp": "^3.0.1",
+    "slug": "^9.1.0",
+    "superagent": "^10.1.0"
+  }
+}

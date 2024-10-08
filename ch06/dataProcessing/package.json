@@ -1,0 +1,17 @@
+{
+  "name": "dataprocessing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js archive.zip"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "csv-parse": "^5.5.6",
+    "unzipper": "^0.12.3"
+  }
+}

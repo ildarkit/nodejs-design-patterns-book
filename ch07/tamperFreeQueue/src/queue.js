@@ -7,7 +7,7 @@ export default class Queue {
     executor({ enqueue: this.#enqueue.bind(this) });
   }
 
-  async #enqueue(element) {
+  #enqueue(element) {
     if (this.consumerQueue.size > 0) {
       const resolve = this.consumerQueue.dequeue();
       return resolve(element);
@@ -15,7 +15,7 @@ export default class Queue {
     this.queue.enqueue(element);
   }
 
-  async dequeue() {
+  dequeue() {
     return new Promise((resolve) => {
       if (this.queue.size > 0)
         return resolve(this.queue.dequeue());

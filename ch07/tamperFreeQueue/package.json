@@ -1,0 +1,16 @@
+{
+  "name": "tamperfreequeue",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/server.js",
+    "client": "node src/client.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "yocto-queue": "^1.1.1"
+  }
+}

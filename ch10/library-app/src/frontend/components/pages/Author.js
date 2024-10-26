@@ -1,17 +1,19 @@
-import react from 'react';
 import { html } from 'htm/react';
 import { useParams } from 'react-router-dom';
-import { FourOhFour } from './FourOhFour';
-import { Header } from '../Header';
-import { authors } from '../../../data/authors';
+import { FourOhFour } from './FourOhFour.js';
+import { Header } from '../Header.js';
+import { authors } from '../../../data/authors.js';
 
-export function Author() {
+export function Author(props) {
   const { authorId } = useParams();
   const author = authors.find(
     author => author.id === authorId
   );
   if (!author) {
-    return html`<${FourOhFour} error="Author not found"/>`;
+    return html`<${FourOhFour}
+      staticContext=${props.staticContext}
+      error="Author not found"
+    />`;
   }
   return html`<div>
     <${Header}/>

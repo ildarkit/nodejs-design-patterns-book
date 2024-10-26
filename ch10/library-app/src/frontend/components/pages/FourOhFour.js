@@ -1,19 +1,17 @@
-import react from 'react';
-import htm from 'htm';
+import { html } from 'htm/react';
 import { Link } from 'react-router-dom';
-import { Header } from '../Header';
+import { Header } from '../Header.js';
 
-const html = htm.bind(react.createElement);
+export function FourOhFour(props) {
+  if (props.staticContext)
+    props.staticContext.statusCode = 404; 
 
-export class FourOhFour extends react.Component {
-  render () {
-    return html`<div>
-      <${Header}/>
-      <div>
-        <h2>404</h2>
-        <h3>${this.props.error || 'Page not found'}</h3>
-        <${Link} to="/">Go back to the home page</>
-      </div>
-    </div>`;
-  }
+  return html`<div>
+    <${Header}/>
+    <div>
+      <h2>404</h2>
+      <h3>${props.error || 'Page not found'}</h3>
+      <${Link} to="/">Go back to the home page</>
+    </div>
+  </div>`;
 }

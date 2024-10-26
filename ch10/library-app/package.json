@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.config.cjs",
@@ -16,10 +17,12 @@
   },
   "engineStrict": true,
   "dependencies": {
+    "@fastify/static": "^8.0.2",
+    "fastify": "^5.0.0",
     "htm": "^3.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.27.0"
+    "react-router-dom": "^5.3.4"
   },
   "devDependencies": {
     "@babel/core": "^7.25.9",

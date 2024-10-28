@@ -5,12 +5,13 @@ import reactDOMServer from 'react-dom/server';
 import { html } from 'htm/react';
 import fastify from 'fastify';
 import fastifyStatic from '@fastify/static';
-import { StaticRouter } from 'react-router-dom';
+import { StaticRouter, matchPath } from 'react-router-dom';
 import { App } from './frontend/App.js';
+import { routes } from './frontend/routes.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const template = ({ content }) => `<!DOCTYPE html>
+const template = ({ content, serverData }) => `<!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8">
@@ -18,6 +19,9 @@ const template = ({ content }) => `<!DOCTYPE html>
   </head>
   <body>
     <div id="root">${content}</div>
+    ${serverData ? `<script type="text/javascript">
+    window.__STATIC_CONTENT__=${JSON.stringify(serverData)}
+    </script>` : ''}
     <script type="text/javascript" src="/public/main.js"></script>
   </body>
 </html>`;
@@ -30,18 +34,42 @@ server.register(fastifyStatic, {
 });
 
 server.get('*', async (req, reply) => {
-  const loc = req.originalUrl;
-  const staticContext = {};
+  const location = req.originalUrl;
+  let route;
+  let match;
+  for (const r of routes) {
+    route = r;
+    match = matchPath(location, route);
+    if (match) break;
+  }
+  let staticData;
+  let staticError;
+  let hasStaticContext = false;
+  if (typeof route.loadData === 'function') {
+    hasStaticContext = true;
+    try {
+      staticData = await route.loadData(match);
+    } catch (err) {
+      staticError = err;
+    }
+  }
+  const staticContext = {
+    [location]: {
+      data: staticData,
+      err: staticError,
+    },
+  };
   const serverApp = html`
     <${StaticRouter}
-      location=${loc}
+      location=${location}
       context=${staticContext}
     >
       <${App}/>
     </>
   `;
   const content = reactDOMServer.renderToString(serverApp);
-  const responseHtml = template({ content });
+  const serverData = hasStaticContext ? staticContext : null;
+  const responseHtml = template({ content, serverData });
 
   let code = 200;
   if (staticContext.statusCode)

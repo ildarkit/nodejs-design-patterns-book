@@ -6,7 +6,7 @@ const server = fastify({ logger: true });
 
 server.register(fastifyCors, { origin: true });
 
-server.get('/api/authors',
+server.get('/api/authors/',
   async function (req, reply) {
     return authors.map(({ id, name }) => ({ id, name }));
   }

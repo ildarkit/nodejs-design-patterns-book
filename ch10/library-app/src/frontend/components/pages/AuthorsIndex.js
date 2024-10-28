@@ -1,6 +1,7 @@
 import { html } from 'htm/react';
 import { Link } from 'react-router-dom';
 import { Header } from '../Header.js';
+import { FourOhFour } from './FourOhFour.js';
 import { preloadAsyncData } from './AsyncPage.js';
 import { useData } from '../../../contextData.js';
 

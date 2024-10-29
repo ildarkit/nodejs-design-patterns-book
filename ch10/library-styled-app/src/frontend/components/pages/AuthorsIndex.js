@@ -1,6 +1,6 @@
 import { html } from 'htm/react';
-import { Link } from 'react-router-dom';
-import { Header } from '../Header.js';
+import { PageContainer } from '../PageContainer.js';
+import { AuthorList } from '../AuthorList.js';
 import { FourOhFour } from './FourOhFour.js';
 import { preloadAsyncData } from './AsyncPage.js';
 import { useData } from '../../../contextData.js';
@@ -14,26 +14,21 @@ export function AuthorsIndex(props) {
   const authors = useData(props, loadAuthors); 
 
   return !(authors.data || authors.err) ? (
-    html`<${Header}><div>Loading...</div>`
+    html`<${PageContainer}>
+      <div className="text-center">Loading...</div>
+    </>`
   ) : (
     authors.err ? (
-      html`<${FourOhFour}
-        staticContext=${props.staticContext}
-        error="Authors not found"
-      />`
+      html`<${PageContainer}>
+        <${FourOhFour}
+          staticContext=${props.staticContext}
+          error="Authors not found"
+        />
+      </>`
     ) : (
-      html`<div>
-        <${Header}/>
-        <div>${authors.data.map((author) =>
-          html`<div key=${author.id}>
-            <p>
-              <${Link} to="${`/author/${author.id}`}">
-                ${author.name}
-              </>
-            </p>
-          </div>`)}
-        </div>
-      </div>`
+      html`<${PageContainer}>
+        <${AuthorList} authors=${authors.data}/>
+      </>`
     )
-  );
+  ); 
 }

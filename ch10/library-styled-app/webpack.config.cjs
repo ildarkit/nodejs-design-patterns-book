@@ -29,7 +29,7 @@ module.exports = function (env, argv) {
         }
       ]
     },
-    devtool: isProd ? 'source-maps' : 'eval',
+    devtool: isProd ? 'source-map' : 'eval',
     devServer: {
       historyApiFallback: true,
       open: true,

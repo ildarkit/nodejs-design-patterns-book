@@ -8,6 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:frontend": "webpack --config webpack.config.cjs --mode production",
     "dev:ui": "concurrently \"webpack-dev-server --config webpack.config.cjs\" \"npm run start:api\"",
+    "dev:server": "webpack-dev-server --config webpack.config.cjs",
     "start:api": "node ./src/api.js",
     "start:server": "node ./src/server.js",
     "start": "npm run build:frontend && concurrently \"npm run start:api\" \"npm run start:server\"",

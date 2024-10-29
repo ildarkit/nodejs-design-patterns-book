@@ -1,7 +1,7 @@
 import { html } from 'htm/react';
 import { PageContainer } from '../PageContainer.js';
 import { AuthorList } from '../AuthorList.js';
-import { FourOhFour } from './FourOhFour.js';
+import { ErrorPage } from './ErrorPage.js';
 import { preloadAsyncData } from './AsyncPage.js';
 import { useData } from '../../../contextData.js';
 
@@ -19,12 +19,10 @@ export function AuthorsIndex(props) {
     </>`
   ) : (
     authors.err ? (
-      html`<${PageContainer}>
-        <${FourOhFour}
-          staticContext=${props.staticContext}
-          error="Authors not found"
-        />
-      </>`
+      html`<${ErrorPage}
+        staticContext=${props.staticContext}
+        error=${authors.err}
+      />`
     ) : (
       html`<${PageContainer}>
         <${AuthorList} authors=${authors.data}/>

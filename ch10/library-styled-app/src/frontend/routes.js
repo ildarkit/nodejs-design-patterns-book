@@ -1,6 +1,6 @@
 import { AuthorsIndex, loadAuthors } from './components/pages/AuthorsIndex.js';
 import { Author, loadAuthor } from './components/pages/Author.js';
-import { FourOhFour } from './components/pages/FourOhFour.js';
+import { ErrorPage } from './components/pages/ErrorPage.js';
 
 export const routes = [
   {
@@ -16,6 +16,6 @@ export const routes = [
   },
   {
     path: '*',
-    component: FourOhFour,
+    component: ErrorPage,
   },
 ];

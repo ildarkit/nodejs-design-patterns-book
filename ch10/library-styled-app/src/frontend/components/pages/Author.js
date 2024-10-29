@@ -1,6 +1,6 @@
 import { html } from 'htm/react';
 import { useParams } from 'react-router-dom';
-import { FourOhFour } from './FourOhFour.js';
+import { ErrorPage } from './ErrorPage.js';
 import { PageContainer } from '../PageContainer.js';
 import { AuthorBio } from '../AuthorBio.js';
 import { AuthorBooks } from '../AuthorBooks.js' 
@@ -23,12 +23,11 @@ export function Author(props) {
     </>`
   ) : (
     author.err ? (
-      html`<${PageContainer}>
-        <${FourOhFour}
-          staticContext=${props.staticContext}
-          error="Author not found"
-        />
-      </>`
+      html`<${ErrorPage}
+        staticContext=${props.staticContext}
+        error=${author.err}
+        message="Author not found"
+      />`
     ) : (
       html`<${PageContainer}>
         <div>

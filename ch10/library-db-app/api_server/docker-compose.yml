@@ -4,7 +4,7 @@ services:
     restart: always
     shm_size: 128m
     env_file:
-      - .env
+      - ../.env
     ports:
       - "5432:5432"
     environment:

@@ -9,7 +9,7 @@ psql -v ON_ERROR_STOP=1 <<-EOSQL
   OWNER $PG_USERNAME;
 
   ALTER USER postgres WITH PASSWORD '$PG_POSTGRES_PASSWORD'; 
-
+  /* COMMENTED: tables are created in the app
   GRANT pg_read_all_data TO $PG_USERNAME;
   GRANT pg_write_all_data TO $PG_USERNAME;
 
@@ -38,4 +38,5 @@ psql -v ON_ERROR_STOP=1 <<-EOSQL
   );');
 
   SELECT dblink_disconnect();
+  */
 EOSQL

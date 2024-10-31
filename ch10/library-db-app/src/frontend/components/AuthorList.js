@@ -7,7 +7,7 @@ export function AuthorList({ authors }) {
       <h2 className="text-center">Books by author</h2>
       <div className="row">${authors.map((author) =>
         html`<div key=${author.id} className="col text-center">
-          <${Link} to="${`/author/${author.id}`}">
+          <${Link} to="${`/author/${author.slug}`}">
             <img src="${`/public/authors/${author.picture}`}" alt="author picture"/>
             <p>${author.name}</p>
           </>

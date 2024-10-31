@@ -4,7 +4,7 @@ export function AuthorBooks({ author }) {
   return html`
     <h3 className="text-center">Books</h3>
     <ul className="books">
-      ${author.books.map((book) =>
+      ${author.Books.map((book) =>
         html`<li key=${book.id} className="book">
           <div className="cover">
             <img src="${`/public/covers/${book.cover}`}"/>

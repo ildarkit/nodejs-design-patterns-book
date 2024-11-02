@@ -24,7 +24,6 @@ export const authors = [
         cover: 'ufzrif1v-a-portrait.jpg'
       },
       {
-        id: '6i9gar9h',
         title: 'Ulysses',
         year: 1922,
         cover: '6i9gar9h-ulysses.jpg'

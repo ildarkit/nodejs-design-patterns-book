@@ -1,8 +1,8 @@
 import { DataTypes } from 'sequelize';
 import SequelizeSlugify from 'sequelize-slugify';
-import { sequelize } from './connection.js';
+import { connection } from './connection.js';
 
-export const Author = sequelize.define(
+export const Author = connection.define(
   'Author',
   {
     id: {
@@ -30,7 +30,7 @@ export const Author = sequelize.define(
   },
 );
 
-export const Book = sequelize.define(
+export const Book = connection.define(
   'Book',
   {
     id: {
@@ -71,4 +71,4 @@ SequelizeSlugify.slugifyModel(Book, {
 Author.belongsToMany(Book, { through: 'AuthorBooks' });
 Book.belongsToMany(Author, { through: 'AuthorBooks' });
 
-await sequelize.sync();
+await connection.sync();

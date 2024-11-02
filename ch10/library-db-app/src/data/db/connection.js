@@ -18,4 +18,4 @@ async function connect() {
   return sequelize;
 }
 
-export const sequelize = await connect();
+export const connection = await connect();

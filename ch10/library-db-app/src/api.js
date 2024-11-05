@@ -1,21 +1,22 @@
 import 'dotenv/config';
 import fastify from 'fastify';
 import fastifyCors from '@fastify/cors';
-import { getAuthors, getAuthorInfo } from './data/repo.js';
+import { Repository } from './data/repo.js';
 
 const server = fastify({ logger: true });
 
+server.decorate('repository', new Repository());
 server.register(fastifyCors, { origin: true });
 
 server.get('/api/authors/',
   async function (req, reply) {
-    return await getAuthors();
+    return await this.repository.getAuthors();
   }
 )
 
 server.get('/api/author/:authorId',
   async function (req, reply) {
-    const author = getAuthorInfo(req.params.authorId);
+    const author = await this.repository.getAuthorInfo(req.params.authorId);
     if (!author) {
       reply.code(404);
       return { error: 'Author not found' };

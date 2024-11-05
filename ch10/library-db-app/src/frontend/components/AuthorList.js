@@ -8,7 +8,11 @@ export function AuthorList({ authors }) {
       <div className="row">${authors.map((author) =>
         html`<div key=${author.id} className="col text-center">
           <${Link} to="${`/author/${author.slug}`}">
-            <img src="${`/public/authors/${author.picture}`}" alt="author picture"/>
+            <img 
+              className="author-picture"
+              src="${`/public/authors/${author.picture}`}"
+              alt="author picture"
+            />
             <p>${author.name}</p>
           </>
         </div>`)}

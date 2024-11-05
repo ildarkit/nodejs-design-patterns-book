@@ -12,6 +12,7 @@ a {
 }
 
 .portrait {
+  width: 134px;
   border-radius: 10px;
 }
 
@@ -48,6 +49,14 @@ a {
 .books .book .info p {
   margin: 0;
   padding: 0;
+}
+
+.author-picture {
+  width: 134px;
+}
+
+.book-cover {
+  width: 80px;
 }
 
 footer {

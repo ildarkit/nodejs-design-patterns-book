@@ -7,7 +7,10 @@ export function AuthorBooks({ author }) {
       ${author.Books.map((book) =>
         html`<li key=${book.id} className="book">
           <div className="cover">
-            <img src="${`/public/covers/${book.cover}`}"/>
+            <img
+              className="book-cover"
+              src="${`/public/covers/${book.cover}`}"
+            />
           </div>
           <div className="info">
             <p className="title">${book.title}</p>

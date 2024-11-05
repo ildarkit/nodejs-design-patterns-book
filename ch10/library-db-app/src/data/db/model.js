@@ -10,6 +10,10 @@ export const Author = connection.define(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
+    key: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     slug: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -37,6 +41,10 @@ export const Book = connection.define(
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
+    },
+    key: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     slug: {
       type: DataTypes.STRING,

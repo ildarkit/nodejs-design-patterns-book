@@ -1,17 +1,16 @@
 import { useState, useEffect } from 'react';
 
-function fromStaticContext(props) {
-  const location = props.match.url;
+function fromStaticContext({ url, staticContext }) {
   const ctx = typeof window !== 'undefined'
     ? window.__STATIC_CONTEXT__
-    : props.staticContext;
-  const staticData = ctx && ctx[location] 
-      ? ctx[location] : null;
+    : staticContext;
+  const staticData = ctx && ctx[url] 
+      ? ctx[url] : null;
   const data = staticData && staticData.data ? staticData.data : null;
   const err = staticData && staticData.err ? staticData.err: null;
 
   typeof window !== 'undefined' && ctx &&
-    delete ctx[location];
+    delete ctx[url];
 
   return { data, err };
 }
@@ -21,7 +20,7 @@ export function useData(props, loader) {
 
   useEffect(() => {
     if ((state.data && state.data.id !== props.id) || !state.data)
-      loader({ id: props.id })
+      loader(props)
         .then(data => {
           setState({ data });
         })

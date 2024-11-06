@@ -1,18 +1,31 @@
-import { AuthorsIndex, loadAuthors } from './components/pages/AuthorsIndex.js';
-import { Author, loadAuthor } from './components/pages/Author.js';
+import { AuthorsIndex } from './components/pages/AuthorsIndex.js';
+import { Author } from './components/pages/Author.js';
 import { ErrorPage } from './components/pages/ErrorPage.js';
+import { asyncApiContent } from './components/pages/AsyncPage.js';
+
+const loadData = (props) => asyncApiContent(props);
+
+const routeMapServer = {
+  index: '/',
+  author: '/author/:authorId',
+};
+
+export const routeMapApi = {
+  authors: routeMapServer.index + 'authors',
+  author: routeMapServer.author,
+};
 
 export const routes = [
   {
-    path: '/',
+    path: routeMapServer.index,
     exact: true,
     component: AuthorsIndex,
-    loadData: (props) => loadAuthors(props),
+    loadData,
   },
   {
-    path: '/author/:authorId',
+    path: routeMapServer.author,
     component: Author,
-    loadData: (props) => loadAuthor(props),
+    loadData,
   },
   {
     path: '*',

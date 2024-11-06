@@ -8,7 +8,7 @@ const server = fastify({ logger: true });
 server.decorate('repository', new Repository());
 server.register(fastifyCors, { origin: true });
 
-server.get('/api/authors/',
+server.get('/api/authors',
   async function (req, reply) {
     return await this.repository.getAuthors();
   }

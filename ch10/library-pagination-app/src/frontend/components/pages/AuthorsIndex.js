@@ -2,16 +2,15 @@ import { html } from 'htm/react';
 import { PageContainer } from '../PageContainer.js';
 import { AuthorList } from '../AuthorList.js';
 import { ErrorPage } from './ErrorPage.js';
-import { preloadAsyncData } from './AsyncPage.js';
+import { asyncApiContent } from './AsyncPage.js';
 import { useData } from '../../../contextData.js';
-
-export async function loadAuthors(props) {
-  const path = `http://localhost:3001/api/authors/`;
-  return await preloadAsyncData(path);
-}
+import { routeMapApi } from '../../routes.js';
 
 export function AuthorsIndex(props) {
-  const authors = useData(props, loadAuthors); 
+  const authors = useData(
+    { ...props, url: routeMapApi.authors },
+    asyncApiContent
+  );
 
   return !(authors.data || authors.err) ? (
     html`<${PageContainer}>

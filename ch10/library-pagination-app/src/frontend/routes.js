@@ -1,7 +1,7 @@
 import { AuthorsIndex } from './components/pages/AuthorsIndex.js';
 import { Author } from './components/pages/Author.js';
 import { ErrorPage } from './components/pages/ErrorPage.js';
-import { asyncApiContent } from './components/pages/AsyncPage.js';
+import { asyncApiContent } from './apiRequestData.js';
 
 const loadData = (props) => asyncApiContent(props);
 

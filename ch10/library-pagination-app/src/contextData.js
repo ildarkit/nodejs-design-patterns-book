@@ -19,13 +19,12 @@ export function useData(props, loader) {
   const [state, setState] = useState(fromStaticContext(props));
 
   useEffect(() => {
-    if ((state.data && state.data.id !== props.id) || !state.data)
-      loader(props)
-        .then(data => {
-          setState({ data });
-        })
-        .catch((err) => setState({ data: null, err}));
-  }, [props.id]);
+    loader(props)
+      .then(data => {
+        setState({ data });
+      })
+      .catch((err) => setState({ data: null, err}));
+  }, [props.url]);
 
   return state;
 }

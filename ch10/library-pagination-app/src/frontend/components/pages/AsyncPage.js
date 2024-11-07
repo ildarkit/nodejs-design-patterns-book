@@ -1,12 +1,37 @@
-import superagent from 'superagent';
-import { tailUrl } from '../helpers.js';
+import { useEffect, useState } from 'react';
+import { html } from 'htm/react';
+import { useLocation } from 'react-router-dom';
+import { PageContainer } from '../PageContainer.js';
+import { AuthorList } from '../AuthorList.js';
+import { ErrorPage } from './ErrorPage.js';
+import { asyncApiContent } from '../../apiRequestData.js';
+import { useData } from '../../../contextData.js';
 
-const api = 'http://localhost:3001/api';
+export default function AsyncPage(props) {
+  const location = useLocation();
+  const [ url, setUrl ] = useState(
+    (props.route || location.pathname) + location.search
+  ); 
+  const res = useData(
+    { ...props, url },
+    asyncApiContent,
+  );
 
-export async function asyncApiContent({ url }) {
-  const path = `${api}${tailUrl(url)}`;
-  const { body } = await superagent
-    .get(path)
-    .timeout({ response: 5000 });
-  return body;
+  return !(res.data || res.err) ? (
+    html`<${PageContainer}>
+      <div className="text-center">Loading...</div>
+    </>`
+  ) : (
+    res.err ? (
+      html`<${ErrorPage}
+        staticContext=${props.staticContext}
+        error=${res.err}
+        message=${props.errorMessage}
+      />`
+    ) : (
+      html`<${PageContainer}>
+        <${props.children} data=${res.data}/> 
+      </>`
+    )
+  ); 
 }

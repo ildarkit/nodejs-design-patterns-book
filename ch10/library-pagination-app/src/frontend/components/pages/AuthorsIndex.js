@@ -5,7 +5,11 @@ import { routeMapApi } from '../../routes.js';
 
 export function AuthorsIndex(props) {
   return html`
-    <${AsyncPage} ...${props} route=${routeMapApi.authors}>
+    <${AsyncPage}
+      ...${props}
+      route=${routeMapApi.authors}
+      itemsPerPage=5
+    >
       ${AuthorList}
     </>`; 
 }

@@ -10,20 +10,40 @@ export class Repository {
     return await this.conn.transaction();
   }
 
-  async getAuthors() {
+  async getAuthors({ offset, limit }) {
+    offset = !offset || offset < 0 ? 0 : offset;
+    limit = !limit || limit < 0 ? 100 : limit; 
+    const total_count = await Author.count();
     const authors = await Author.findAll({
-      attributes: ['id' ,'slug', 'name', 'picture']
+      attributes: ['id' ,'slug', 'name', 'picture'],
+      offset,
+      limit,
     });
-    return authors;
+    return { result: { authors }, total_count };
   }
 
-  async getAuthorInfo(slug) {
+  async getAuthorInfo({ slug, offset, limit }) {
+    offset = !offset || offset < 0 ? 0 : offset;
+    limit = !limit || limit < 0 ? 100 : limit;
+    const total_count = await Book.count({
+      include: [{
+        model: Author,
+        where: { slug },
+      }],
+    });
     const author = await Author.findOne({
       attributes: ['name', 'bio', 'picture'],
-      where: { slug },
-      include: Book,
+      where: { slug }, 
     });
-    return author;
+    const books = author ? await Book.findAll({
+      offset,
+      limit,
+      include: [{
+        model: Author,
+        where: { slug },
+      }],
+    }) : [];
+    return { result: { author, books }, total_count };
   }
 
   async getAuthor(slug) {

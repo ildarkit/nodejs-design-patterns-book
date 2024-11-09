@@ -5,14 +5,18 @@ import AsyncPage from './AsyncPage.js';
 
 export function Author(props) {
   return html`
-    <${AsyncPage} ...${props} errorMessage="Author not found">
+    <${AsyncPage} 
+      ...${props}
+      errorMessage="Author not found"
+      itemsPerPage=10
+    >
       ${AuthorDetail}
     </>`;
 }
 
-function AuthorDetail({ data }) {
+function AuthorDetail({ data, ...rest }) {
   return html`
-    <${AuthorBio} author=${data}/>
-    <${AuthorBooks} author=${data}/>
+    <${AuthorBio} author=${data.author}/>
+    <${AuthorBooks} ...${rest} books=${data.books}/>
   `;
 }

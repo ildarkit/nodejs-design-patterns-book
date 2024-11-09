@@ -10,18 +10,22 @@ server.register(fastifyCors, { origin: true });
 
 server.get('/api/authors',
   async function (req, reply) {
-    return await this.repository.getAuthors();
+    return await this.repository.getAuthors(req.query);
   }
 )
 
 server.get('/api/author/:authorId',
   async function (req, reply) {
-    const author = await this.repository.getAuthorInfo(req.params.authorId);
-    if (!author) {
+    const response = await this.repository
+      .getAuthorInfo({
+        slug: req.params.authorId,
+        ...req.query
+      });
+    if (!response.result.author) {
       reply.code(404);
       return { error: 'Author not found' };
     }
-    return author;
+    return response;
   }
 )
 

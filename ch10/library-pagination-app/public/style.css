@@ -1,9 +1,13 @@
 body {
-  background-color: #EEE2DC;
+  background-color: #DECFCF;
 }
 
 h1 a {
-  color: #C3073F;
+  color: #8caf50;
+}
+
+h2 {
+  color: #445
 }
 
 a {
@@ -68,4 +72,40 @@ footer {
 
 footer a {
   color: #BAB2B5;
+}
+
+.center {
+  text-align: center;
+}
+
+.pagination {
+  display: inline-block;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+  border: 1px solid #ddd;
+  margin: 0 4px;
+}
+
+.pagination a.active {
+  background-color: #4caf50;
+  color: white;
+  border: 1px solid #4CAF50;
+}
+
+.pagination a:hover:not(.active) {background-color: #e0dbdf;}
+
+a.disabled {
+  pointer-events: none;
+  color: #999;
+  background-color: #C1C1C1;
+}
+
+h1 a:hover {
+  color: #32CD32
 }

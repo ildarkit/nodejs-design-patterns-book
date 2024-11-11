@@ -8,7 +8,7 @@ export function AuthorsIndex(props) {
     <${AsyncPage}
       ...${props}
       route=${routeMapApi.authors}
-      itemsPerPage=5
+      itemsPerPage=${2}
     >
       ${AuthorList}
     </>`; 

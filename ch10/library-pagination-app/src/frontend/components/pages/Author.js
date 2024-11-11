@@ -8,7 +8,7 @@ export function Author(props) {
     <${AsyncPage} 
       ...${props}
       errorMessage="Author not found"
-      itemsPerPage=10
+      itemsPerPage=${3}
     >
       ${AuthorDetail}
     </>`;

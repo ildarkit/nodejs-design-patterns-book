@@ -12,35 +12,76 @@ export default function PaginateItems({
   totalCount
 }) {
   const [ page, setPage ] = useState(0);
+  const [ pageNumbers, setPageNumbers ] = useState([]);
   const [ offset, setOffSet ] = useState((page * pageItemCount) % totalCount);
   const [ pageCount, setPageCount ] = useState();
   const [ limit, setLimit ] = useState(DATA_LIMIT);
 
   useEffect(() => {
-    const endOffset = offset + pageItemCount;
-    handleItems(offset, endOffset);
-    setPageCount(Math.ceil(totalCount / pageItemCount));
+    const newPageCount = Math.ceil(totalCount / pageItemCount);
+    generateNewPageNumbers(newPageCount);
+
+    handleItems(offset, offset + pageItemCount);
+
+    setPageCount(newPageCount); 
   }, [offset, pageItemCount]); 
 
-  function onPageChange(event) {
-    setPage(event.selected);
-    setOffSet((page * pageItemCount) % totalCount);
-    if (offset + pageItemCount >= limit)
-      handleUrl(queryString.stringify({
-        offset: ((page + 1) * pageItemCount) % totalCount,
-        limit, 
-      }));
+  function generateNewPageNumbers(count) {
+    if (newPageCount <= 10) {
+      setPageNumbers(
+        [...Array(newPageCount).keys()]
+          .map(i => i + 1)
+      );
+      return;
+    } 
+  }
+
+  function paginate(pageNumber, event) {
+    event.preventDefault();
+    const newOffset = (pageNumber * pageItemCount) % totalCount;
+    setPage(pageNumber);
+    setOffSet(newOffset);
+    handleItems(newOffset, newOffset + pageItemCount); 
   };
   
-  // TODO: component not rendering
-  // return html`
-  //   <${ReactPaginate}
-  //     previousLabel="Previous"
-  //     nextLabel="Next"
-  //     breakLabel="..."
-  //     pageCount=${pageCount}
-  //     onPageChange=${onPageChange}
-  //     renderOnZeroPageCount=${null}
-  //   />`;
-  return html`<p>fix pagination rendering</p>`;
+  return pageCount > 1 && html`
+      <div className="center">
+        <div className="pagination">
+          <${Control}
+            page=${page - 1}
+            label="Previous"
+            handleClick=${paginate}
+            disabled=${page === 0}
+          /> 
+          ${pageNumbers.map(i => (
+           html`
+            <${Control}
+            page=${i - 1}
+            label=${i}
+            handleClick=${paginate}
+            active=${page === i - 1}
+            />`
+          ))}
+          <${Control}
+            page=${page + 1}
+            label="Next"
+            handleClick=${paginate}
+            disabled=${page === pageCount - 1}
+          /> 
+        </div>
+      </div>`;
+}
+
+function Control({ page, label, handleClick, disabled = false, active = false }) {
+  return html`
+    <a
+      key=${label}
+      onClick=${(e) => handleClick(page, e)}
+      href="#"
+      role="button"
+      className=${disabled ? "disabled" : active ? "active" : ""}
+    >
+      ${label}
+    </a>
+  `;
 }

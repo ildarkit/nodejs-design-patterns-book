@@ -27,9 +27,9 @@ export default function PaginateItems({
   }, [offset, pageItemCount]); 
 
   function generateNewPageNumbers(count) {
-    if (newPageCount <= 10) {
+    if (count <= 10) {
       setPageNumbers(
-        [...Array(newPageCount).keys()]
+        [...Array(count).keys()]
           .map(i => i + 1)
       );
       return;

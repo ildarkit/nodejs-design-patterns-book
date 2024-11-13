@@ -4,12 +4,13 @@ import { useLocation } from 'react-router-dom';
 import { PageContainer } from '../PageContainer.js';
 import { AuthorList } from '../AuthorList.js';
 import { ErrorPage } from './ErrorPage.js';
-import { asyncApiContent } from '../../apiRequestData.js';
+import { asyncApiContent } from '../../../api/apiRequestData.js';
 import { useData } from '../../contextData.js';
+import { routeMapApi } from '../../routes.js';
 
 export default function AsyncPage(props) {
   const location = useLocation();
-  const pathName = props.route || location.pathname;
+  const pathName = routeMapApi[location.pathname] || location.pathname;
   const [ url, setUrl ] = useState(pathName + location.search);
 
   const res = useData(

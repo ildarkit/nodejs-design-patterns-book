@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import fastify from 'fastify';
 import fastifyCors from '@fastify/cors';
-import { Repository } from './data/repo.js';
+import { Repository } from '../data/repo.js';
 
 const server = fastify({ logger: true });
 

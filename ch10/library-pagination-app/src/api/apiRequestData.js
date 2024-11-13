@@ -1,5 +1,5 @@
 import superagent from 'superagent';
-import { tailUrl } from './components/helpers.js';
+import { tailUrl } from './helpers.js';
 
 const api = 'http://localhost:3001/api';
 

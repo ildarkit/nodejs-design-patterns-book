@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { html } from 'htm/react';
-import ReactPaginate from 'react-paginate';
 import queryString from 'query-string';
 
 const DATA_LIMIT = 100;
@@ -19,19 +18,23 @@ export default function PaginateItems({
 
   useEffect(() => {
     const newPageCount = Math.ceil(totalCount / pageItemCount);
-    generatePageNumbers(newPageCount, page, setPageNumbers);
-
+    setPageCount(newPageCount);
     handleItems(offset, offset + pageItemCount);
-
-    setPageCount(newPageCount); 
   }, [offset, pageItemCount]); 
+
+  useEffect(() => {
+    generatePageNumbers(
+      pageCount,
+      page,
+      setPageNumbers
+    );
+  }, [pageCount, page]); 
 
   function paginate(pageNumber, event) {
     event.preventDefault();
     const newOffset = ((pageNumber - 1) * pageItemCount) % totalCount;
     setPage(pageNumber);
     setOffSet(newOffset);
-    handleItems(newOffset, newOffset + pageItemCount);
   };
   
   return pageCount > 1 && html`
@@ -86,29 +89,28 @@ function isDisabled(num, page, pageCount) {
 }
 
 function generatePageNumbers(count, page, handleNumbers) {
-    if (count < 9) {
-      handleNumbers(
-        [...Array(count + 2).keys()]
-      );
-      return;
-    }
-    const nums = Array.from({ length: 9 });
+  if (count < 9)
+    return handleNumbers(
+      [...Array(count + 2).keys()]
+    );
 
-    const edgeGroup = (page < 4 || page > count - 3) ? 4 : 2;
-    for (let i = 0; i < edgeGroup; i++) {
-      nums[i] = i;
-      nums[(nums.length - 1) - i] = count - i + 1;
-    }
+  const nums = Array.from({ length: 9 });
 
-    if (edgeGroup === 4)
-      nums[edgeGroup] = Math.ceil(count / 2);
-    else { 
-      nums[edgeGroup] = Math.ceil(page / 2);
-      nums[edgeGroup + 4] = page + Math.ceil((count - page) / 2);
-      for (let i = 0; i < 3; i++) {
-        nums[i + 3] = page - 1 + i;
-      }
-    }
-
-    handleNumbers(nums);
+  const edgeGroup = (page < 4 || page > count - 3) ? 4 : 2;
+  for (let i = 0; i < edgeGroup; i++) {
+    nums[i] = i;
+    nums[(nums.length - 1) - i] = count - i + 1;
   }
+
+  if (edgeGroup === 4)
+    nums[edgeGroup] = Math.ceil(count / 2);
+  else { 
+    nums[edgeGroup] = Math.ceil(page / 2);
+    nums[edgeGroup + 4] = page + Math.ceil((count - page) / 2);
+    for (let i = 0; i < 3; i++) {
+      nums[i + 3] = page - 1 + i;
+    }
+  }
+
+  handleNumbers(nums);
+}

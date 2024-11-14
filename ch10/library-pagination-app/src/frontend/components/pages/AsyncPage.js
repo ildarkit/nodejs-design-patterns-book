@@ -6,7 +6,7 @@ import { AuthorList } from '../AuthorList.js';
 import { ErrorPage } from './ErrorPage.js';
 import { asyncApiContent } from '../../../api/apiRequestData.js';
 import { useData } from '../../contextData.js';
-import { routeMapApi } from '../../routes.js';
+import { routeMapApi } from '../../../routes.js';
 
 export default function AsyncPage(props) {
   const location = useLocation();

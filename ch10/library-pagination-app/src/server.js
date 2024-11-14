@@ -6,8 +6,8 @@ import { html } from 'htm/react';
 import fastify from 'fastify';
 import fastifyStatic from '@fastify/static';
 import { StaticRouter, matchPath } from 'react-router-dom';
-import { App } from '../frontend/App.js';
-import { routes, routeMapApi } from '../api/routes.js';
+import { App } from './frontend/App.js';
+import { routes, routeMapApi } from './routes.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -33,7 +33,7 @@ const template = ({ content, serverData }) => `<!DOCTYPE html>
 const server = fastify({ logger: true });
 
 server.register(fastifyStatic, {
-  root: resolve(__dirname, '../..', 'public'),
+  root: resolve(__dirname, '..', 'public'),
   prefix: '/public/'
 });
 

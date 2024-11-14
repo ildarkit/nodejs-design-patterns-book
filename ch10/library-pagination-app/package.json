@@ -10,7 +10,7 @@
     "dev:ui": "concurrently \"webpack-dev-server --config webpack.config.cjs\" \"npm run start:api\"",
     "dev:server": "webpack-dev-server --config webpack.config.cjs",
     "start:api": "node ./src/api/api.js",
-    "start:server": "node ./src/server/server.js",
+    "start:server": "node ./src/server.js",
     "start": "npm run build:frontend && concurrently \"npm run start:api\" \"npm run start:server\"",
     "build": "npm run build:frontend"
   },

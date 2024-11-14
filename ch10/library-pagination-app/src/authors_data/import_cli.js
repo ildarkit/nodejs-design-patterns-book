@@ -18,17 +18,20 @@ async function importAuthorData(repository, data) {
       const slug = slugify(item.name);
       const key = item.key ? item.key : null;
       let author = await repository.getAuthor(slug);
-      if (author === null)
+      if (author === null) {
+        const bio = typeof item.bio === 'object' && item.bio.value ?
+          item.bio.value : item.bio;
         author = await repository.createAuthor({
           props: {
             key,
             slug,
             name: item.name,
-            bio: item.bio,
+            bio,
             picture: item.picture,
           },
           transaction
         });
+      }
       item.books.forEach(book => {
         book.slug = slugify(`${book.title} ${book.year}`);
       });

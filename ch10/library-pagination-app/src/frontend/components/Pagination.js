@@ -1,26 +1,20 @@
 import { useEffect, useState } from 'react';
 import { html } from 'htm/react';
-import queryString from 'query-string';
 
 const DATA_LIMIT = 100;
 
 export default function PaginateItems({
-  handleUrl,
   handleItems,
   pageItemCount,
   totalCount
 }) {
   const [ page, setPage ] = useState(1);
   const [ pageNumbers, setPageNumbers ] = useState([]);
-  const [ offset, setOffSet ] = useState(((page - 1) * pageItemCount) % totalCount);
   const [ pageCount, setPageCount ] = useState();
-  const [ limit, setLimit ] = useState(DATA_LIMIT);
 
   useEffect(() => {
-    const newPageCount = Math.ceil(totalCount / pageItemCount);
-    setPageCount(newPageCount);
-    handleItems(offset, offset + pageItemCount);
-  }, [offset, pageItemCount]); 
+    setPageCount(Math.ceil(totalCount / pageItemCount));
+  }, [totalCount, pageItemCount]); 
 
   useEffect(() => {
     generatePageNumbers(
@@ -28,13 +22,16 @@ export default function PaginateItems({
       page,
       setPageNumbers
     );
-  }, [pageCount, page]); 
+  }, [pageCount, page]);
 
-  function paginate(pageNumber, event) {
+  function paginate(currentPage, event) {
     event.preventDefault();
-    const newOffset = ((pageNumber - 1) * pageItemCount) % totalCount;
-    setPage(pageNumber);
-    setOffSet(newOffset);
+    const oldOffset = ((page - 1) * pageItemCount) % totalCount;
+    const newOffset = ((currentPage - 1) * pageItemCount) % totalCount;
+
+    handleItems({ oldOffset, newOffset, limit: DATA_LIMIT }); 
+
+    setPage(currentPage);
   };
   
   return pageCount > 1 && html`

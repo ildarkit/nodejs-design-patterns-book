@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { html } from 'htm/react';
 import { useLocation } from 'react-router-dom';
 import { PageContainer } from '../PageContainer.js';
-import { AuthorList } from '../AuthorList.js';
 import { ErrorPage } from './ErrorPage.js';
 import { asyncApiContent } from '../../../api/apiRequestData.js';
 import { useData } from '../../contextData.js';
@@ -18,8 +17,8 @@ export default function AsyncPage(props) {
     asyncApiContent,
   );
 
-  function handleUrl(query) {
-    setUrl(pathName + query);
+  function handleData(query) {
+    setUrl(`${pathName}?${query}`);
   }
 
   return !(res.data || res.err) ? (
@@ -39,7 +38,7 @@ export default function AsyncPage(props) {
       <${PageContainer}>
         <${props.children} 
           data=${res.data.result}
-          handleUrl=${handleUrl}
+          handleData=${handleData}
           pageItemCount=${props.itemsPerPage}
           totalCount=${res.data.total_count}
         /> 

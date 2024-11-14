@@ -1,14 +1,10 @@
-import { useState } from 'react';
 import { html } from 'htm/react';
 import { Link } from 'react-router-dom';
 import PaginateItems from './Pagination.js';
+import { handleItems, useItems } from './helpers.js';
 
-export function AuthorList({ data, ...rest }) {
-  const [ currentItems, setCurrentItems ] = useState([]);
-
-  function handleItems(startOffset, endOffset) {
-    setCurrentItems(data.authors.slice(startOffset, endOffset));
-  };
+export function AuthorList({ data, handleData, pageItemCount, ...rest }) {
+  const [ currentItems, handleOffset ] = useItems(data.authors, pageItemCount); 
 
   return html`
     <div>
@@ -17,7 +13,10 @@ export function AuthorList({ data, ...rest }) {
         <div className="col">
           <${PaginateItems} 
             ...${rest}
-            handleItems=${handleItems}
+            handleItems=${(args) => handleItems(
+              { ...args, handleOffset, handleData }
+            )}
+            pageItemCount=${pageItemCount}
           /> 
         </div>
       </div>

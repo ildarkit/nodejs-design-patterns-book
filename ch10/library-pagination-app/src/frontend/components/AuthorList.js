@@ -1,10 +1,12 @@
 import { html } from 'htm/react';
 import { Link } from 'react-router-dom';
 import PaginateItems from './Pagination.js';
-import { handleItems, useItems } from './helpers.js';
+import { handleItems } from './helpers.js';
+import { useStoredPage, useStoredOffsetItems } from '../session.js';
 
 export function AuthorList({ data, handleData, pageItemCount, ...rest }) {
-  const [ currentItems, handleOffset ] = useItems(data.authors, pageItemCount); 
+  const [ currentItems, handleOffset ] = useStoredOffsetItems(
+    data.authors, pageItemCount); 
 
   return html`
     <div>
@@ -17,6 +19,7 @@ export function AuthorList({ data, handleData, pageItemCount, ...rest }) {
               { ...args, handleOffset, handleData }
             )}
             pageItemCount=${pageItemCount}
+            handleStoredPage=${useStoredPage}
           /> 
         </div>
       </div>

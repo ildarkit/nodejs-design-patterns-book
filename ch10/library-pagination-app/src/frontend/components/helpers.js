@@ -1,5 +1,5 @@
 import queryString from 'query-string';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 
 export function handleItems({
   oldOffset,
@@ -21,19 +21,16 @@ export function handleItems({
   handleOffset(newOffset % limit); 
 }
 
-export function useItems(items, pageItemCount) {
+export function useItems(items, pageItemCount, handleStoredState) {
   const [ currentItems, setCurrentItems ] = useState([]);
-  const [ offset, setOffset ] = useState(0);
-  const listID = useMemo(
-    () => items.map(item => item.id).join(','),
-    [items]
-  );
+  const [ offset, setOffset ] = handleStoredState ?
+    handleStoredState() : useState(0);
 
   useEffect(() => {
     setCurrentItems(items.slice(
       offset, offset + pageItemCount)
     );
-  }, [offset, listID]);
+  }, [offset]);
 
   return [ currentItems, setOffset ];
 }

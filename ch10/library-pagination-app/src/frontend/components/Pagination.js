@@ -6,9 +6,10 @@ const DATA_LIMIT = 100;
 export default function PaginateItems({
   handleItems,
   pageItemCount,
-  totalCount
+  totalCount,
+  handleStoredPage
 }) {
-  const [ page, setPage ] = useState(1);
+  const [ page, setPage ] = handleStoredPage ? handleStoredPage() : useState(1);
   const [ pageNumbers, setPageNumbers ] = useState([]);
   const [ pageCount, setPageCount ] = useState();
 

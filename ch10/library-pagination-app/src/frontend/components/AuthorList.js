@@ -4,32 +4,37 @@ import PaginateItems from './Pagination.js';
 import { handleItems } from './helpers.js';
 import { useStoredPage, useStoredOffsetItems } from '../session.js';
 
-export function AuthorList({ data, handleData, pageItemCount, ...rest }) {
+export function AuthorList({
+  authors,
+  handleData,
+  perPageItems,
+  children,
+  ...rest
+}) {
   const [ currentItems, handleOffset ] = useStoredOffsetItems(
-    data.authors, pageItemCount); 
+    authors, perPageItems); 
 
   return html`
     <div>
-      <${Authors} items=${currentItems}/>
-      <div className="row">
-        <div className="col">
-          <${PaginateItems} 
-            ...${rest}
-            handleItems=${(args) => handleItems(
-              { ...args, handleOffset, handleData }
-            )}
-            pageItemCount=${pageItemCount}
-            handleStoredPage=${useStoredPage}
-          /> 
-        </div>
-      </div>
+      <${Authors} items=${currentItems}>
+        ${children}
+      </> 
+      <${PaginateItems} 
+        ...${rest}
+        handleItems=${(args) => handleItems(
+          { ...args, handleOffset, handleData }
+        )}
+        perPageItems=${perPageItems}
+        handleStoredPage=${useStoredPage}
+      /> 
     </div>
   `;
 }
 
-function Authors({ items }) {
+function Authors({ items, children }) {
   return html`
     <h2 className="text-center">Books by author</h2>
+    ${children}
     <div className="row">${items.map((author) =>
       html`<div key=${author.id} className="col text-center">
         <${Link} to="${`/author/${author.slug}`}">

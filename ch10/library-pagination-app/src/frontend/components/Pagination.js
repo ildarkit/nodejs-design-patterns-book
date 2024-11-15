@@ -5,7 +5,7 @@ const DATA_LIMIT = 100;
 
 export default function PaginateItems({
   handleItems,
-  pageItemCount,
+  perPageItems,
   totalCount,
   handleStoredPage
 }) {
@@ -14,8 +14,8 @@ export default function PaginateItems({
   const [ pageCount, setPageCount ] = useState();
 
   useEffect(() => {
-    setPageCount(Math.ceil(totalCount / pageItemCount));
-  }, [totalCount, pageItemCount]); 
+    setPageCount(Math.ceil(totalCount / perPageItems));
+  }, [totalCount, perPageItems]); 
 
   useEffect(() => {
     generatePageNumbers(
@@ -27,8 +27,8 @@ export default function PaginateItems({
 
   function paginate(currentPage, event) {
     event.preventDefault();
-    const oldOffset = ((page - 1) * pageItemCount) % totalCount;
-    const newOffset = ((currentPage - 1) * pageItemCount) % totalCount;
+    const oldOffset = ((page - 1) * perPageItems) % totalCount;
+    const newOffset = ((currentPage - 1) * perPageItems) % totalCount;
 
     handleItems({ oldOffset, newOffset, limit: DATA_LIMIT }); 
 
@@ -36,6 +36,8 @@ export default function PaginateItems({
   };
   
   return pageCount > 1 && html`
+   <div className="row">
+    <div className="col"> 
       <div className="center">
         <div className="pagination"> 
           ${pageNumbers.map(num => (
@@ -49,7 +51,9 @@ export default function PaginateItems({
             />`
           ))} 
         </div>
-      </div>`;
+      </div>
+    </div>
+  </div>`;
 }
 
 function Control({ page, label, handleClick, disabled = false, active = false }) {

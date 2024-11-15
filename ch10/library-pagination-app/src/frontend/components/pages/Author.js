@@ -2,21 +2,22 @@ import { html } from 'htm/react';
 import { AuthorBio } from '../AuthorBio.js';
 import { AuthorBooks } from '../AuthorBooks.js';
 import AsyncPage from './AsyncPage.js';
+import { PerPageDropMenu } from '../PerPageItems.js';
 
 export function Author(props) {
   return html`
     <${AsyncPage} 
       ...${props}
       errorMessage="Author not found"
-      itemsPerPage=${3}
     >
-      ${AuthorDetail}
+      ${AuthorDetailDropMenu}
     </>`;
 }
 
-function AuthorDetail({ data, ...rest }) {
+function AuthorDetailDropMenu({ data, ...rest }) {
   return html`
     <${AuthorBio} author=${data.author}/>
-    <${AuthorBooks} ...${rest} books=${data.books}/>
-  `;
+    <${PerPageDropMenu} ...${rest} books=${data.books}>
+      ${AuthorBooks} 
+    </>`;
 }

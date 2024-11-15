@@ -2,30 +2,29 @@ import { html } from 'htm/react';
 import PaginateItems from './Pagination.js';
 import { handleItems, useItems } from './helpers.js';
 
-export function AuthorBooks({ books, handleData, pageItemCount, ...rest }) {
-  const [ currentItems, handleOffset ] = useItems(books, pageItemCount);
+export function AuthorBooks({ books, handleData, perPageItems, children, ...rest }) {
+  const [ currentItems, handleOffset ] = useItems(books, perPageItems);
 
   return html`
     <div>
-      <${Books} items=${currentItems}/>
-      <div className="row">
-        <div className="col">
-          <${PaginateItems} 
-            ...${rest}
-            handleItems=${(args) => handleItems(
-              { ...args, handleOffset, handleData }
-            )}
-            pageItemCount=${pageItemCount}
-          /> 
-        </div>
-      </div>
+      <${Books} items=${currentItems}>
+        ${children}
+      </>
+      <${PaginateItems} 
+        ...${rest}
+        handleItems=${(args) => handleItems(
+          { ...args, handleOffset, handleData }
+        )}
+        perPageItems=${perPageItems}
+      /> 
     </div>
   `;
 }
 
-function Books({ items }) {
+function Books({ items, children }) {
   return html`
     <h3 className="text-center">Books</h3>
+    ${children}
     <ul className="books">
       ${items.map((book) =>
         html`<li key=${book.id} className="book">

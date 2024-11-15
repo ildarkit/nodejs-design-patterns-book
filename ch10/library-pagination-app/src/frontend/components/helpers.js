@@ -21,16 +21,16 @@ export function handleItems({
   handleOffset(newOffset % limit); 
 }
 
-export function useItems(items, pageItemCount, handleStoredState) {
+export function useItems(items, perPageItems, handleStoredState) {
   const [ currentItems, setCurrentItems ] = useState([]);
   const [ offset, setOffset ] = handleStoredState ?
     handleStoredState() : useState(0);
 
   useEffect(() => {
     setCurrentItems(items.slice(
-      offset, offset + pageItemCount)
+      offset, offset + perPageItems)
     );
-  }, [offset]);
+  }, [offset, perPageItems]);
 
   return [ currentItems, setOffset ];
 }

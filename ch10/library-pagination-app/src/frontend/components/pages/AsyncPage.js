@@ -7,13 +7,18 @@ import { asyncApiContent } from '../../../api/apiRequestData.js';
 import { useData } from '../../contextData.js';
 import { routeMapApi } from '../../../routes.js';
 
-export default function AsyncPage(props) {
+export default function AsyncPage({ 
+  staticContext,
+  errorMessage,
+  children,
+}) {
+  const childrenComponents = [children].flat();
   const location = useLocation();
   const pathName = routeMapApi[location.pathname] || location.pathname;
   const [ url, setUrl ] = useState(pathName + location.search);
 
   const res = useData(
-    { ...props, url },
+    { url, staticContext },
     asyncApiContent,
   );
 
@@ -29,20 +34,22 @@ export default function AsyncPage(props) {
     res.err ? (
       html`
       <${ErrorPage}
-        staticContext=${props.staticContext}
+        staticContext=${staticContext}
         error=${res.err}
-        message=${props.errorMessage}
+        message=${errorMessage}
       />`
     ) : (
       html`
       <${PageContainer}>
-        <${props.children} 
-          data=${res.data.result}
-          handleData=${handleData}
-          pageItemCount=${props.itemsPerPage}
-          totalCount=${res.data.total_count}
-        /> 
+        ${childrenComponents.map((child) => html`
+          <${child}
+            key=${child.Name}
+            data=${res.data.result}
+            handleData=${handleData}
+            totalCount=${res.data.total_count}
+          />`
+        )}
       </>`
     )
-  ); 
+  );
 }

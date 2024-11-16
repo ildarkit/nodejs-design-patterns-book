@@ -13,7 +13,7 @@ export default function PaginateItems({
   const [ pageNumbers, setPageNumbers ] = useState([]);
   const [ pageCount, setPageCount ] = useState(Math.ceil(totalCount / perPageItems));
   const [ previousPerPageItems, setPreviousPerPageItems ] = useState(perPageItems);
-  const [ offset, setOffset ] = useState(0);
+  const [ offset, setOffset ] = useState((page - 1) * perPageItems % totalCount);
 
   useEffect(() => {
     setPageCount(Math.ceil(totalCount / perPageItems));
@@ -25,7 +25,8 @@ export default function PaginateItems({
     else {
       newPage = Math.ceil(offset / perPageItems) + 1;
     }
-    paginate(newPage);
+    
+    if (page !== newPage) paginate(newPage);
 
     setPreviousPerPageItems(perPageItems);
   }, [totalCount, perPageItems]); 

@@ -8,8 +8,8 @@ const items = [
   {value: 50, label: "50 items"},
 ];
 
-export function PerPageDropMenu({ children, ...rest }) {
-  const [ perPageItems, setPerPageItems ] = useState(5);
+export function PerPageDropMenu({ children, handleSession, ...rest }) {
+  const [ perPageItems, setPerPageItems ] = handleSession ? handleSession(5) : useState(5);
 
   return html`
     <${children} ...${rest} perPageItems=${perPageItems}>

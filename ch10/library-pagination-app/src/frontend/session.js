@@ -1,21 +1,20 @@
 import { useState, useEffect } from 'react';
 import { useItems } from './components/helpers.js';
 
-export function useSessionStorage(key, initialValue) {
-    const [value, setValue] = useState(() => {
-      const storedValue = sessionStorage.getItem(key);
-      return storedValue ? JSON.parse(storedValue) : initialValue;
-    });
+export function useSessionStorage(key, initialValue) { 
+  const sessionStorage = typeof window !== 'undefined' ?
+    window.sessionStorage : undefined;
 
-    useEffect(() => {
-      sessionStorage.setItem(key, JSON.stringify(value));
-    }, [key, value]);
+  const [value, setValue] = useState(() => {
+    const storedValue = sessionStorage && sessionStorage.getItem(key);
+    return storedValue ? JSON.parse(storedValue) : initialValue;
+  });
 
-    return [value, setValue];
-}
+  useEffect(() => {
+    sessionStorage && sessionStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
 
-export function useStoredPage() {
-  return useSessionStorage('page', 1);
+  return [value, setValue];
 }
 
 export function useStoredOffsetItems(items, pageItemCount) {

@@ -7,9 +7,9 @@ export default function PaginateItems({
   handleItems,
   perPageItems,
   totalCount,
-  handleStoredPage
+  handleSession
 }) {
-  const [ page, setPage ] = handleStoredPage ? handleStoredPage() : useState(1);
+  const [ page, setPage ] = handleSession ? handleSession(1) : useState(1);
   const [ pageNumbers, setPageNumbers ] = useState([]);
   const [ pageCount, setPageCount ] = useState(Math.ceil(totalCount / perPageItems));
   const [ previousPerPageItems, setPreviousPerPageItems ] = useState(perPageItems);

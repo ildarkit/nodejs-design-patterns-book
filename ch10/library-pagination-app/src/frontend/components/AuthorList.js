@@ -2,7 +2,7 @@ import { html } from 'htm/react';
 import { Link } from 'react-router-dom';
 import PaginateItems from './Pagination.js';
 import { handleItems } from './helpers.js';
-import { useStoredPage, useStoredOffsetItems } from '../session.js';
+import { useSessionStorage, useStoredOffsetItems } from '../session.js';
 
 export function AuthorList({
   authors,
@@ -25,7 +25,7 @@ export function AuthorList({
           { ...args, handleOffset, handleData }
         )}
         perPageItems=${perPageItems}
-        handleStoredPage=${useStoredPage}
+        handleSession=${(initValue) => useSessionStorage('authorListPage', initValue)}
       /> 
     </div>
   `;

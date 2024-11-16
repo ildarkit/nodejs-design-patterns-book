@@ -2,6 +2,7 @@ import { html } from 'htm/react';
 import { AuthorList } from '../AuthorList.js';
 import AsyncPage from './AsyncPage.js';
 import { PerPageDropMenu } from '../PerPageItems.js';
+import { useSessionStorage } from '../../session.js';
 
 export function AuthorsIndex(props) {
   return html`
@@ -12,7 +13,11 @@ export function AuthorsIndex(props) {
 
 function AuthorListDropMenu({ data, ...rest }) {
   return html`
-    <${PerPageDropMenu} ...${rest} authors=${data.authors}>
+    <${PerPageDropMenu} 
+      ...${rest}
+      authors=${data.authors}
+      handleSession=${(initValue) => useSessionStorage('authorsListPerPageItems', initValue)}
+    >
       ${AuthorList} 
     </>`;
 }

@@ -1,6 +1,7 @@
 import { html } from 'htm/react';
 import PaginateItems from './Pagination.js';
 import { handleItems, useItems } from './helpers.js';
+import { useSessionStorage } from '../session.js';
 
 export function AuthorBooks({ books, handleData, perPageItems, children, ...rest }) {
   const [ currentItems, handleOffset ] = useItems(books, perPageItems);
@@ -16,6 +17,7 @@ export function AuthorBooks({ books, handleData, perPageItems, children, ...rest
           { ...args, handleOffset, handleData }
         )}
         perPageItems=${perPageItems}
+        handleSession=${(initValue) => useSessionStorage('authorBooksPage', initValue)}
       /> 
     </div>
   `;

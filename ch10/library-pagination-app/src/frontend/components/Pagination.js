@@ -11,10 +11,23 @@ export default function PaginateItems({
 }) {
   const [ page, setPage ] = handleStoredPage ? handleStoredPage() : useState(1);
   const [ pageNumbers, setPageNumbers ] = useState([]);
-  const [ pageCount, setPageCount ] = useState();
+  const [ pageCount, setPageCount ] = useState(Math.ceil(totalCount / perPageItems));
+  const [ previousPerPageItems, setPreviousPerPageItems ] = useState(perPageItems);
+  const [ offset, setOffset ] = useState(0);
 
   useEffect(() => {
     setPageCount(Math.ceil(totalCount / perPageItems));
+    
+    let newPage;
+    if (perPageItems > previousPerPageItems) { 
+      newPage = Math.ceil((offset + previousPerPageItems) / perPageItems);
+    }
+    else {
+      newPage = Math.ceil(offset / perPageItems) + 1;
+    }
+    paginate(newPage);
+
+    setPreviousPerPageItems(perPageItems);
   }, [totalCount, perPageItems]); 
 
   useEffect(() => {
@@ -26,15 +39,15 @@ export default function PaginateItems({
   }, [pageCount, page]);
 
   function paginate(currentPage, event) {
-    event.preventDefault();
-    const oldOffset = ((page - 1) * perPageItems) % totalCount;
+    event && event.preventDefault();
     const newOffset = ((currentPage - 1) * perPageItems) % totalCount;
 
-    handleItems({ oldOffset, newOffset, limit: DATA_LIMIT }); 
+    handleItems({ oldOffset: offset, newOffset, limit: DATA_LIMIT }); 
 
     setPage(currentPage);
+    setOffset(newOffset);
   };
-  
+
   return pageCount > 1 && html`
    <div className="row">
     <div className="col"> 

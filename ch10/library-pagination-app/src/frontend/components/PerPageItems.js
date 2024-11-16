@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { html } from 'htm/react';
 
 const items = [
-  {value: 1, label: "1 item"},
   {value: 5, label: "5 items"},
   {value: 10, label: "10 items"},
+  {value: 20, label: "20 items"},
   {value: 50, label: "50 items"},
-  {value: 100, label: "100 items"},
 ];
 
 export function PerPageDropMenu({ children, ...rest }) {

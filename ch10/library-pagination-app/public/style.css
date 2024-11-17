@@ -109,3 +109,11 @@ a.disabled {
 h1 a:hover {
   color: #32CD32
 }
+
+.items-dropdown {
+  color: #445;
+  font-weight: bold;
+  background-color: #a599bf;
+  border: 1px solid #DDD;
+  width: fit-content;
+}

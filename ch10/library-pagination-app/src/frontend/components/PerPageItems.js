@@ -9,7 +9,8 @@ const items = [
 ];
 
 export function PerPageDropMenu({ children, handleSession, ...rest }) {
-  const [ perPageItems, setPerPageItems ] = handleSession ? handleSession(5) : useState(5);
+  const [ perPageItems, setPerPageItems ] = handleSession ?
+    handleSession(5) : useState(5);
 
   return html`
     <${children} ...${rest} perPageItems=${perPageItems}>
@@ -33,9 +34,10 @@ function PerPageItems(props) {
 function DropDownMenu({ items, handleValue, perPageItems }) {
   return html`
     <div className="row">
-      <div className="col">
-        <label htmlFor="dropdown-items">Items count:</label>
+      <div className="col"></div>
+      <div className="col-1">
         <select 
+          className="items-dropdown"
           name="dropdown"
           id="dropdown-items"
           defaultValue=${perPageItems}
@@ -51,6 +53,7 @@ function DropDownMenu({ items, handleValue, perPageItems }) {
           )}
         </select>
       </div>
+      <div className="col-10"></div>
     </div>
   `;
 }

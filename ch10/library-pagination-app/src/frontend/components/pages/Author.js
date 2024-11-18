@@ -4,6 +4,7 @@ import { AuthorBooks } from '../AuthorBooks.js';
 import AsyncPage from './AsyncPage.js';
 import { PerPageDropMenu } from '../PerPageItems.js';
 import { useSessionStorage } from '../../session.js';
+import { NavBar } from '../SearchBar.js';
 
 export function Author(props) {
   return html`
@@ -17,6 +18,7 @@ export function Author(props) {
 
 function AuthorDetailDropMenu({ data, ...rest }) {
   return html`
+    <${NavBar}/>
     <${AuthorBio} author=${data.author}/>
     <${PerPageDropMenu} 
       ...${rest}

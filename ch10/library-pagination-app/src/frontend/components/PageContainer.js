@@ -5,8 +5,7 @@ import { Footer } from './Footer.js';
 export function PageContainer({ children }) {
   return html`
     <div className="container">
-      <${Header}/>
-        ${children}
+      ${children}
       <${Footer}/>
     </div>`;
 } 

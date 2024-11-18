@@ -14,6 +14,23 @@ a {
   font-weight: bold;
 }
 
+.authors {
+  display: grid;
+  gap: 1em;
+  grid-template-columns: repeat(5, auto);
+  grid-template-rows: repeat(5, auto);
+  grid-auto-flow: row;
+  justify-items: center;
+  align-items: stretch;
+  justify-content: space-evenly;
+  align-content: space-evenly;
+}
+
+.author {
+ justify-self: center; 
+ align-self: stretch;
+}
+
 .portrait {
   width: 134px;
   border-radius: 10px;
@@ -79,6 +96,7 @@ footer a {
 
 .pagination {
   display: inline-block;
+  padding-top: 50px;
 }
 
 .pagination a {

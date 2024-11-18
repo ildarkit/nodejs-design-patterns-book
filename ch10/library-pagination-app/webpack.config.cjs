@@ -46,7 +46,10 @@ module.exports = function (env, argv) {
         title: 'My library',
         meta: { viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no' }
       }), 
-      new HtmlWebpackTagsPlugin({ tags: ['public/wing.css', 'public/style.css'], append: true }),
+      new HtmlWebpackTagsPlugin({
+        tags: ['public/wing.css', 'public/style.css'],
+        append: true
+      }),
       new HtmlWebpackRootPlugin()
     ]
   }

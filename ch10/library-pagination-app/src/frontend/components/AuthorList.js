@@ -24,7 +24,7 @@ export function AuthorList({
         handleItems=${(args) => handleItems(
           { ...args, handleOffset, handleData }
         )}
-        perPageItems=${perPageItems}
+  perPageItems=${perPageItems}
         handleSession=${(initValue) => useSessionStorage('authorListPage', initValue)}
       /> 
     </div>
@@ -35,8 +35,8 @@ function Authors({ items, children }) {
   return html`
     <h2 className="text-center">Books by author</h2>
     ${children}
-    <div className="row">${items.map((author) =>
-      html`<div key=${author.id} className="col text-center">
+    <div className="authors">${items.map((author) =>
+      html`<div key=${author.id} className="author">
         <${Link} to="${`/author/${author.slug}`}">
           <img 
             className="author-picture"

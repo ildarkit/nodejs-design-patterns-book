@@ -50,24 +50,20 @@ export default function PaginateItems({
   };
 
   return pageCount > 1 && html`
-   <div className="row">
-    <div className="col"> 
-      <div className="center">
-        <div className="pagination"> 
-          ${pageNumbers.map(num => (
-           html`
-            <${Control}
-            page=${getPage(num, page, pageCount)}
-            label=${getLabel(num, page, pageCount)}
-            handleClick=${paginate}
-            active=${(num > 0 && num < pageCount + 1) ? page === num : false}
-            disabled=${isDisabled(num, page, pageCount)}
-            />`
-          ))} 
-        </div>
+    <div className="center">
+      <div className="pagination"> 
+        ${pageNumbers.map(num => (
+         html`
+          <${Control}
+          page=${getPage(num, page, pageCount)}
+          label=${getLabel(num, page, pageCount)}
+          handleClick=${paginate}
+          active=${(num > 0 && num < pageCount + 1) ? page === num : false}
+          disabled=${isDisabled(num, page, pageCount)}
+          />`
+        ))} 
       </div>
-    </div>
-  </div>`;
+    </div>`;
 }
 
 function Control({ page, label, handleClick, disabled = false, active = false }) {

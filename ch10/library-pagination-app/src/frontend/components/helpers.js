@@ -21,10 +21,19 @@ export function handleItems({
   handleOffset(newOffset % limit); 
 }
 
-export function useItems(items, perPageItems, handleStoredState) {
+export function useItems(items, perPageItems, handleStoredState, resetOffset) {
   const [ currentItems, setCurrentItems ] = useState([]);
   const [ offset, setOffset ] = handleStoredState ?
     handleStoredState() : useState(0);
+
+  useEffect(() => {
+    if (resetOffset) {
+      setOffset(0);
+      setCurrentItems(
+        items.slice(0, perPageItems)
+      );
+    }
+  }, [resetOffset]);
 
   useEffect(() => {
     setCurrentItems(items.slice(
@@ -33,4 +42,18 @@ export function useItems(items, perPageItems, handleStoredState) {
   }, [offset, perPageItems]);
 
   return [ currentItems, setOffset ];
+}
+
+export function useNewData(data) {
+  const [ hash, setHash ] = useState(data.hash);
+  const [ update, setUpdate ] = useState(true);
+  
+  useEffect(() => {
+    const updated = data.hash !== hash;
+    setUpdate(updated);
+    if (updated)
+      setHash(data.hash);
+  }, [data.hash]);
+
+  return update;
 }

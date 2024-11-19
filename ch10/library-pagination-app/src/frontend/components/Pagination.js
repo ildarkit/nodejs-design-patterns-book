@@ -4,6 +4,7 @@ import { html } from 'htm/react';
 const DATA_LIMIT = 100;
 
 export default function PaginateItems({
+  resetPage,
   handleItems,
   perPageItems,
   totalCount,
@@ -14,6 +15,11 @@ export default function PaginateItems({
   const [ pageCount, setPageCount ] = useState(Math.ceil(totalCount / perPageItems));
   const [ previousPerPageItems, setPreviousPerPageItems ] = useState(perPageItems);
   const [ offset, setOffset ] = useState((page - 1) * perPageItems % totalCount);
+
+  useEffect(() => {
+    setOffset(0);
+    setPage(1);
+  }, [resetPage]);
 
   useEffect(() => {
     setPageCount(Math.ceil(totalCount / perPageItems));

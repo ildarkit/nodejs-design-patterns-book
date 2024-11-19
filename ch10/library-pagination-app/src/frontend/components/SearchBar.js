@@ -1,22 +1,32 @@
 import { html } from 'htm/react';
-import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import queryString from 'query-string';
+import { useSessionStorage } from '../session.js';
 
 export function SearchForm({ handleData }) {
-  const {
-    register,
-    handleSubmit,
-    watch
-  } = useForm();
+  const [ query, setQuery ] = useSessionStorage('queryAuthors', '');
 
-  function onSubmit(data) {
-    console.log(data);
+  function onSubmit(event) {
+    event.preventDefault();
+    handleData(queryString.stringify({
+      q: event.target.q.value
+    }));
+  }
+
+  function onChange(event) {
+    setQuery(event.target.value);
   }
 
   return html`
     <div className="search">
-      <form onSubmit=${handleSubmit(onSubmit)}>
-        <input type="text" name="q" placeholder="Search query" ...${register("query")}/> 
+      <form onSubmit=${onSubmit}>
+        <input 
+          type="text"
+          name="q"
+          onChange=${onChange}
+          placeholder="Search author"
+          value=${query}
+        /> 
       </form>
     </div>
   `;

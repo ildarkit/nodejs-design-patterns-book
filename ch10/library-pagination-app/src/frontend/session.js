@@ -17,6 +17,6 @@ export function useSessionStorage(key, initialValue) {
   return [value, setValue];
 }
 
-export function useStoredOffsetItems(items, pageItemCount) {
-  return useItems(items, pageItemCount, () => useSessionStorage('offset', 0)); 
+export function useStoredOffsetItems(items, pageItemCount, resetOffset = false) {
+  return useItems(items, pageItemCount, () => useSessionStorage('offset', 0), resetOffset); 
 }

@@ -19,7 +19,7 @@ function AuthorListDropMenu({ data, handleData, ...rest }) {
     </>
     <${PerPageDropMenu} 
       ...${rest}
-      authors=${data.authors}
+      data=${data}
       handleSession=${(initValue) => useSessionStorage('authorsListPerPageItems', initValue)}
     >
       ${AuthorList} 

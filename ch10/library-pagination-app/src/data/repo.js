@@ -1,5 +1,17 @@
+import crypto from 'node:crypto';
+import { Op } from 'sequelize';
 import { Author, Book } from './db/model.js';
 import { connection } from './db/connection.js';
+
+function getHash(data) {
+  const hash = crypto.createHash('sha256');
+  const value = data.map(d => d.slug).join(' ');
+  const hashed = hash
+    .update(value)
+    .digest('hex');
+  console.log(`hash = ${hashed}`);
+  return hashed;
+}
 
 export class Repository {
   constructor(conn = connection) {
@@ -10,16 +22,33 @@ export class Repository {
     return await this.conn.transaction();
   }
 
-  async getAuthors({ offset, limit }) {
+  async getAuthors({ q, offset, limit }) {
     offset = !offset || offset < 0 ? 0 : offset;
     limit = !limit || limit < 0 ? 100 : limit; 
-    const total_count = await Author.count();
+
+    const whereClause = q ? {
+      where: {
+        name: {
+          [Op.like]: `%${q}%`,
+        },
+      },
+    } : {};
+
+    const total_count = await Author.count({ ...whereClause });
     const authors = await Author.findAll({
-      attributes: ['id' ,'slug', 'name', 'picture'],
+      attributes: ['slug', 'name', 'picture'],
+      ...whereClause,
       offset,
       limit,
     });
-    return { result: { authors }, total_count };
+
+    return {
+      result: {
+        authors,
+        hash: getHash(authors)
+      },
+      total_count
+    };
   }
 
   async getAuthorInfo({ slug, offset, limit }) {

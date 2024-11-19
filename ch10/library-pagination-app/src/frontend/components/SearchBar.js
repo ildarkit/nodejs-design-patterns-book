@@ -2,7 +2,7 @@ import { html } from 'htm/react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
-function SearchForm({ handleData }) {
+export function SearchForm({ handleData }) {
   const {
     register,
     handleSubmit,
@@ -14,9 +14,11 @@ function SearchForm({ handleData }) {
   }
 
   return html`
-    <form onSubmit=${handleSubmit(onSubmit)}>
-      <input type="text" name="q" placeholder="Search query" ...${register("query")}/> 
-    </form>
+    <div className="search">
+      <form onSubmit=${handleSubmit(onSubmit)}>
+        <input type="text" name="q" placeholder="Search query" ...${register("query")}/> 
+      </form>
+    </div>
   `;
 }
 
@@ -26,17 +28,9 @@ export function NavBar({ children, ...rest }) {
       <div className="links">
         <${Link} to="/">My Library</>
       </div>
-      <div className="search">
-        ${children && html`<${children} ...${rest}/>`} 
-      </div>
+      ${children && (children.map ?
+        children.map(child => html`<${child} key=${child.Name} ...${rest}/>`) :
+        html`<${children} ...${rest}/>`)} 
     </div>
-  `;
-}
-
-export function SearchBar(props) {
-  return html`
-    <${NavBar} ...${props}>
-      ${SearchForm}
-    </>
   `;
 }

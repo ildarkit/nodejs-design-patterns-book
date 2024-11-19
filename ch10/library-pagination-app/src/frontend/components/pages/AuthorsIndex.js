@@ -3,7 +3,7 @@ import { AuthorList } from '../AuthorList.js';
 import AsyncPage from './AsyncPage.js';
 import { PerPageDropMenu } from '../PerPageItems.js';
 import { useSessionStorage } from '../../session.js';
-import { SearchBar } from '../SearchBar.js';
+import { NavBar, SearchForm } from '../SearchBar.js';
 
 export function AuthorsIndex(props) {
   return html`
@@ -14,7 +14,9 @@ export function AuthorsIndex(props) {
 
 function AuthorListDropMenu({ data, handleData, ...rest }) {
   return html`
-    <${SearchBar} handleData=${handleData}/>
+    <${NavBar} handleData=${handleData}>
+      ${SearchForm}
+    </>
     <${PerPageDropMenu} 
       ...${rest}
       authors=${data.authors}

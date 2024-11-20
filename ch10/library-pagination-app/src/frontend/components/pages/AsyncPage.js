@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { html } from 'htm/react';
 import { useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 import { PageContainer } from '../PageContainer.js';
 import { ErrorPage } from './ErrorPage.js';
 import { asyncApiContent } from '../../../api/apiRequestData.js';
@@ -15,7 +16,8 @@ export default function AsyncPage({
   const childrenComponents = [children].flat();
   const location = useLocation();
   const pathName = routeMapApi[location.pathname] || location.pathname;
-  const [ url, setUrl ] = useState(pathName + location.search);
+  const [ url, setUrl ] = useState(pathName);
+  const [ query, setQuery ] = useState('');
 
   const res = useData(
     { url, staticContext },
@@ -23,7 +25,9 @@ export default function AsyncPage({
   );
 
   function handleData(query) {
-    setUrl(`${pathName}?${query}`);
+    setQuery(query);
+    const q = queryString.stringify({ q: query });
+    setUrl(`${pathName}?${q}`);
   }
 
   return !(res.data || res.err) ? (
@@ -45,6 +49,8 @@ export default function AsyncPage({
           <${child}
             key=${child.Name}
             data=${res.data.result}
+            query=${query}
+            resetQuery=${() => setQuery('')}
             handleData=${handleData}
             totalCount=${res.data.total_count}
           />`

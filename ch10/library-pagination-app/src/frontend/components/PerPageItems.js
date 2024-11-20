@@ -33,27 +33,23 @@ function PerPageItems(props) {
 
 function DropDownMenu({ items, handleValue, perPageItems }) {
   return html`
-    <div className="row">
-      <div className="col"></div>
-      <div className="col-1">
-        <select 
-          className="items-dropdown"
-          name="dropdown"
-          id="dropdown-items"
-          defaultValue=${perPageItems}
-          onChange=${(e) => handleValue(Number(e.target.value))}
-        >
-          ${items.map(item => html`
-            <option 
-              key=${item.value}
-              value=${item.value}
-            >
-              ${item.label}
-            </option>`
-          )}
-        </select>
-      </div>
-      <div className="col-10"></div>
+    <div className="items-dropdown">
+      <select 
+        className="items-select"
+        name="dropdown"
+        id="dropdown-items"
+        defaultValue=${perPageItems}
+        onChange=${(e) => handleValue(Number(e.target.value))}
+      >
+        ${items.map(item => html`
+          <option 
+            key=${item.value}
+            value=${item.value}
+          >
+            ${item.label}
+          </option>`
+        )}
+      </select>
     </div>
   `;
 }

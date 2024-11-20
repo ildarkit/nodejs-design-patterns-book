@@ -1,6 +1,5 @@
 import { html } from 'htm/react';
 import { Link } from 'react-router-dom';
-import queryString from 'query-string';
 import { useSessionStorage } from '../session.js';
 
 export function SearchForm({ handleData }) {
@@ -8,13 +7,13 @@ export function SearchForm({ handleData }) {
 
   function onSubmit(event) {
     event.preventDefault();
-    handleData(queryString.stringify({
-      q: event.target.q.value
-    }));
+    handleData(event.target.q.value);
   }
 
   function onChange(event) {
-    setQuery(event.target.value);
+    const value = event.target.value;
+    if (value.length <= 30)
+      setQuery(event.target.value);
   }
 
   return html`

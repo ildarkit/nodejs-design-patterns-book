@@ -5,13 +5,44 @@ body {
   background-color: #dddeef;
 }
 
-h2 {
+h2, h3 {
   color: #445
 }
 
 a {
   color: #123C69;
   font-weight: bold;
+}
+
+.no-result {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  align-items: stretch;
+  align-content: center;
+}
+
+.no-result h3 {
+  justify-self: center;
+}
+
+.clean-search {
+  display: inline-grid;
+  gap: 1em;
+  align-items: center;
+  grid-template-columns: 1fr 1fr;
+  justify-content: space-between;
+  padding-bottom: 25px;
+}
+
+.clean-search-button {
+  background-color: grey;
+  margin: 0;
+  padding 0 1em;
+}
+
+.clean-search-button:hover {
+  background-color: green;
 }
 
 .authors {
@@ -124,6 +155,11 @@ a.disabled {
 }
 
 .items-dropdown {
+  grid: grid;
+  padding-bottom: 15px;
+}
+
+.items-select {
   color: #445;
   background-color: #dde;
   font-weight: bold;

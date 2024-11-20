@@ -1,30 +1,36 @@
 import { html } from 'htm/react';
 import { Link } from 'react-router-dom';
 import PaginateItems from './Pagination.js';
-import { handleItems, useNewData } from './helpers.js';
-import { useSessionStorage, useStoredOffsetItems } from '../session.js';
+import { handleItems, useNewSearchedData } from './helpers.js';
+import { useSessionStorage, useStoredOffset } from '../session.js';
 
 export function AuthorList({
   data,
+  query,
+  resetQuery,
   handleData,
   perPageItems,
   children,
   ...rest
 }) {
-  const isNewData = useNewData(data); 
-  const [ currentItems, handleOffset ] = useStoredOffsetItems(
-    data.authors, perPageItems, isNewData); 
+  const newSearchData = useNewSearchedData(data.q, query);
+  const [ offset, handleOffset ] = useStoredOffset(
+    perPageItems, newSearchData); 
 
   return html`
     <div>
-      <${Authors} items=${currentItems}>
+      <${Authors}
+        items=${data.authors.slice(offset, offset + perPageItems)}
+        query=${query}
+        resetQuery=${resetQuery}
+      >
         ${children}
       </> 
       <${PaginateItems} 
         ...${rest}
-        resetPage=${isNewData}
+        resetPage=${newSearchData}
         handleItems=${(args) => handleItems(
-          { ...args, handleOffset, handleData }
+          { ...args, query, handleOffset, handleData }
         )}
         perPageItems=${perPageItems}
         handleSession=${(initValue) => useSessionStorage('authorListPage', initValue)}
@@ -33,9 +39,11 @@ export function AuthorList({
   `;
 }
 
-function Authors({ items, children }) {
+function Authors({ items, children, ...rest }) {
+  
   return html`
-    <h2 className="text-center">Books by author</h2>
+    <h2 className="text-center">Books by author</h2> 
+    <${QueryClean} ...${rest}/>
     ${children}
     <div className="authors">
       ${items.map((author) => html`
@@ -55,6 +63,20 @@ function Authors({ items, children }) {
           <h3 className="text-center">No result.</h3>
         </div>`
       }
+    </div>
+  `;
+}
+
+function QueryClean({ query, resetQuery }) {
+  return query && html`
+    <div className="clean-search">
+      <p>Search for "${query}"</p>
+      <button 
+        className="clean-search-button"
+        onClick=${() => resetQuery()}
+      >
+        Clean search
+      </button>
     </div>
   `;
 }

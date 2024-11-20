@@ -1,17 +1,6 @@
-import crypto from 'node:crypto';
 import { Op } from 'sequelize';
 import { Author, Book } from './db/model.js';
 import { connection } from './db/connection.js';
-
-function getHash(data) {
-  const hash = crypto.createHash('sha256');
-  const value = data.map(d => d.slug).join(' ');
-  const hashed = hash
-    .update(value)
-    .digest('hex');
-  console.log(`hash = ${hashed}`);
-  return hashed;
-}
 
 export class Repository {
   constructor(conn = connection) {
@@ -42,10 +31,12 @@ export class Repository {
       limit,
     });
 
+    const query = {q: offset > 0 ? q : undefined };
+
     return {
       result: {
         authors,
-        hash: getHash(authors)
+        ...query,
       },
       total_count
     };

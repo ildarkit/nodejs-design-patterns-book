@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 export function handleItems({
   oldOffset,
   newOffset,
+  query,
   handleOffset,
   handleData,
   limit
@@ -13,6 +14,7 @@ export function handleItems({
 
   if (oldLimitPage !== newLimitPage) {
     handleData(queryString.stringify({
+      q: query,
       offset: limit * newLimitPage,
       limit,
     }));
@@ -21,39 +23,36 @@ export function handleItems({
   handleOffset(newOffset % limit); 
 }
 
-export function useItems(items, perPageItems, handleStoredState, resetOffset) {
-  const [ currentItems, setCurrentItems ] = useState([]);
+export function useOffset(
+  perPageItems,
+  handleStoredState,
+  resetOffset
+) {
   const [ offset, setOffset ] = handleStoredState ?
     handleStoredState() : useState(0);
 
   useEffect(() => {
     if (resetOffset) {
-      setOffset(0);
-      setCurrentItems(
-        items.slice(0, perPageItems)
-      );
+      setOffset(0); 
     }
-  }, [resetOffset]);
+  }, [resetOffset]); 
 
-  useEffect(() => {
-    setCurrentItems(items.slice(
-      offset, offset + perPageItems)
-    );
-  }, [offset, perPageItems]);
-
-  return [ currentItems, setOffset ];
+  return [ offset, setOffset ];
 }
 
-export function useNewData(data) {
-  const [ hash, setHash ] = useState(data.hash);
-  const [ update, setUpdate ] = useState(true);
+export function useNewSearchedData(dataQuery, newQuery) {
+  const [ update, setUpdate ] = useState(false);
+  const [ query, setQuery ] = useState(newQuery);
   
   useEffect(() => {
-    const updated = data.hash !== hash;
+    let updated;
+    if (dataQuery || (newQuery === query))
+      updated = false;
+    else if (newQuery !== query)
+      updated = true; 
     setUpdate(updated);
-    if (updated)
-      setHash(data.hash);
-  }, [data.hash]);
-
+    setQuery(newQuery);
+  }, [newQuery]); 
+   
   return update;
 }

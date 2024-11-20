@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useItems } from './components/helpers.js';
+import { useOffset } from './components/helpers.js';
 
 export function useSessionStorage(key, initialValue) { 
   const sessionStorage = typeof window !== 'undefined' ?
@@ -17,6 +17,6 @@ export function useSessionStorage(key, initialValue) {
   return [value, setValue];
 }
 
-export function useStoredOffsetItems(items, pageItemCount, resetOffset = false) {
-  return useItems(items, pageItemCount, () => useSessionStorage('offset', 0), resetOffset); 
+export function useStoredOffset(pageItemCount, resetOffset = false) {
+  return useOffset(pageItemCount, () => useSessionStorage('offset', 0), resetOffset); 
 }

@@ -1,14 +1,14 @@
 import { html } from 'htm/react';
 import PaginateItems from './Pagination.js';
-import { handleItems, useItems } from './helpers.js';
+import { handleItems, useOffset } from './helpers.js';
 import { useSessionStorage } from '../session.js';
 
 export function AuthorBooks({ books, handleData, perPageItems, children, ...rest }) {
-  const [ currentItems, handleOffset ] = useItems(books, perPageItems);
+  const [ offset, handleOffset ] = useOffset(perPageItems);
 
   return html`
     <div>
-      <${Books} items=${currentItems}>
+      <${Books} items=${books.slice(offset, offset + perPageItems)}>
         ${children}
       </>
       <${PaginateItems} 

@@ -25,6 +25,7 @@ export default function AsyncPage({
   );
 
   function handleData(query) {
+    query = query || '';
     setQuery(query);
     const q = queryString.stringify({ q: query });
     setUrl(`${pathName}?${q}`);

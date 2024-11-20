@@ -17,12 +17,19 @@ export function AuthorList({
   const [ offset, handleOffset ] = useStoredOffset(
     perPageItems, newSearchData); 
 
+  console.log(`offset = ${offset}`);
+
+  function resetQueryData() {
+    resetQuery();
+    handleData();
+  }
+
   return html`
     <div>
       <${Authors}
         items=${data.authors.slice(offset, offset + perPageItems)}
         query=${query}
-        resetQuery=${resetQuery}
+        resetQuery=${resetQueryData}
       >
         ${children}
       </> 

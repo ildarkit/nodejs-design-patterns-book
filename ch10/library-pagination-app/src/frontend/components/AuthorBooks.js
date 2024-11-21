@@ -1,10 +1,11 @@
+import { useState } from 'react';
 import { html } from 'htm/react';
 import PaginateItems from './Pagination.js';
-import { handleItems, useOffset } from './helpers.js';
+import { handleItems } from './helpers.js';
 import { useSessionStorage } from '../session.js';
 
 export function AuthorBooks({ books, handleData, perPageItems, children, ...rest }) {
-  const [ offset, handleOffset ] = useOffset(perPageItems);
+  const [ offset, handleOffset ] = useState(0);
 
   return html`
     <div>

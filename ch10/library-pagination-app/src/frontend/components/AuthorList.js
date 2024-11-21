@@ -1,7 +1,7 @@
 import { html } from 'htm/react';
 import { Link } from 'react-router-dom';
 import PaginateItems from './Pagination.js';
-import { handleItems, useNewSearchedData } from './helpers.js';
+import { handleItems, useNewSearch } from './helpers.js';
 import { useSessionStorage, useStoredOffset } from '../session.js';
 
 export function AuthorList({
@@ -13,13 +13,13 @@ export function AuthorList({
   children,
   ...rest
 }) {
-  const newSearchData = useNewSearchedData(data.q, query);
-  const [ offset, handleOffset ] = useStoredOffset(perPageItems, newSearchData); 
+  const newSearchData = useNewSearch(data.q, query);
+  const [ offset, handleOffset ] = useSessionStorage('offset', 0); 
 
   function resetQueryData() {
     resetQuery();
     handleData();
-  }
+  } 
 
   return html`
     <div>

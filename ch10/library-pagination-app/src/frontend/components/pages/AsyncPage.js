@@ -7,6 +7,7 @@ import { ErrorPage } from './ErrorPage.js';
 import { asyncApiContent } from '../../../api/apiRequestData.js';
 import { useData } from '../../contextData.js';
 import { routeMapApi } from '../../../routes.js';
+import { useSessionStorage } from '../../session.js';
 
 export default function AsyncPage({ 
   staticContext,
@@ -16,19 +17,16 @@ export default function AsyncPage({
   const childrenComponents = [children].flat();
   const location = useLocation();
   const pathName = routeMapApi[location.pathname] || location.pathname;
-  const [ url, setUrl ] = useState(pathName);
-  const [ query, setQuery ] = useState('');
+  const [ query, setQuery ] = useSessionStorage('searchDataQuery', '');
 
   const res = useData(
-    { url, staticContext },
+    { url: paramsUrl(pathName, query), staticContext },
     asyncApiContent,
   );
 
   function handleData(query) {
     query = query || '';
     setQuery(query);
-    const q = queryString.stringify({ q: query });
-    setUrl(`${pathName}?${q}`);
   }
 
   return !(res.data || res.err) ? (
@@ -59,4 +57,9 @@ export default function AsyncPage({
       </>`
     )
   );
+}
+
+function paramsUrl(url, query) {
+  const q = queryString.stringify({ q: query });
+  return `${url}?${q}`;
 }

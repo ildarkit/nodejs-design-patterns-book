@@ -23,36 +23,12 @@ export function handleItems({
   handleOffset(newOffset % limit); 
 }
 
-export function useOffset(
-  perPageItems,
-  handleStoredState,
-  resetOffset
-) {
-  const [ offset, setOffset ] = handleStoredState ?
-    handleStoredState() : useState(0);
-
-  useEffect(() => {
-    if (resetOffset) {
-      setOffset(0); 
-    }
-  }, [resetOffset]); 
-
-  return [ offset, setOffset ];
-}
-
-export function useNewSearchedData(dataQuery, newQuery) {
-  const [ update, setUpdate ] = useState(false);
+export function useNewSearch(dataQuery, newQuery) {
   const [ query, setQuery ] = useState(newQuery);
   
-  useEffect(() => {
-    let updated;
-    if (dataQuery || (newQuery === query))
-      updated = false;
-    else if (newQuery !== query)
-      updated = true; 
-    setUpdate(updated);
+  useEffect(() => { 
     setQuery(newQuery);
   }, [newQuery]); 
-   
-  return update;
+
+  return (!dataQuery && query !== newQuery);
 }

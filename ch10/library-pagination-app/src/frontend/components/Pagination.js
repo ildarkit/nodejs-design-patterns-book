@@ -17,8 +17,10 @@ export default function PaginateItems({
   const [ offset, setOffset ] = useState((page - 1) * perPageItems % totalCount);
 
   useEffect(() => {
-    setOffset(0);
-    setPage(1);
+    if (resetPage) {
+      setOffset(0);
+      setPage(1);
+    }
   }, [resetPage]);
 
   useEffect(() => {

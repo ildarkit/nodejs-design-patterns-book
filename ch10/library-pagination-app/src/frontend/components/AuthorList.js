@@ -14,10 +14,7 @@ export function AuthorList({
   ...rest
 }) {
   const newSearchData = useNewSearchedData(data.q, query);
-  const [ offset, handleOffset ] = useStoredOffset(
-    perPageItems, newSearchData); 
-
-  console.log(`offset = ${offset}`);
+  const [ offset, handleOffset ] = useStoredOffset(perPageItems, newSearchData); 
 
   function resetQueryData() {
     resetQuery();

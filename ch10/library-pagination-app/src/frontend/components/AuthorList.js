@@ -38,6 +38,8 @@ export function AuthorList({
         )}
         perPageItems=${perPageItems}
         handleSession=${(initValue) => useSessionStorage('authorListPage', initValue)}
+        offset=${offset}
+        handleOffset=${handleOffset}
       /> 
     </div>
   `;

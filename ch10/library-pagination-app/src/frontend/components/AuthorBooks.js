@@ -18,6 +18,8 @@ export function AuthorBooks({ books, handleData, perPageItems, children, ...rest
         )}
         perPageItems=${perPageItems}
         handleSession=${(initValue) => useSessionStorage('authorBooksPage', initValue)}
+        offset=${offset}
+        handleOffset=${handleOffset}
       /> 
     </div>
   `;

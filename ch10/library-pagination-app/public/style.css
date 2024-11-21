@@ -17,31 +17,33 @@ a {
 .no-result {
   display: grid;
   grid-template-columns: 1fr;
-  justify-items: center;
-  align-items: stretch;
-  align-content: center;
+  align-items: center;
+  justify-items: center 
 }
 
-.no-result h3 {
-  justify-self: center;
+.no-result p {
+  font-size: 2em;
+  font-weight: bold;
+  padding: 10px;
+  background: yellow;
 }
 
-.clean-search {
+.clear-search {
   display: inline-grid;
   gap: 1em;
   align-items: center;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 150px;
   justify-content: space-between;
   padding-bottom: 25px;
 }
 
-.clean-search-button {
+.clear-search-button {
   background-color: grey;
   margin: 0;
   padding 0 1em;
 }
 
-.clean-search-button:hover {
+.clear-search-button:hover {
   background-color: green;
 }
 

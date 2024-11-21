@@ -49,7 +49,7 @@ function Authors({ items, children, ...rest }) {
     <h2 className="text-center">Books by author</h2> 
     <${QueryClean} ...${rest}/>
     ${children}
-    <div className="authors">
+    ${items.length > 0 && html`<div className="authors">
       ${items.map((author) => html`
         <div key=${author.id} className="author">
           <${Link} to="${`/author/${author.slug}`}">
@@ -61,25 +61,25 @@ function Authors({ items, children, ...rest }) {
             <p>${author.name}</p>
           </>
         </div>
-      `)}
-      ${items.length === 0 && html`
-        <div className="no-result">
-          <h3 className="text-center">No result.</h3>
-        </div>`
-      }
-    </div>
+      `)} 
+    </div>`}
+    ${items.length === 0 && html`
+      <div className="no-result">
+        <p>No result.</p>
+      </div>`
+    }
   `;
 }
 
 function QueryClean({ query, resetQuery }) {
   return query && html`
-    <div className="clean-search">
-      <p>Search for "${query}"</p>
+    <div className="clear-search">
+      <p>Search result for "${query}"</p>
       <button 
-        className="clean-search-button"
+        className="clear-search-button"
         onClick=${() => resetQuery()}
       >
-        Clean search
+        Clear search
       </button>
     </div>
   `;

@@ -4,6 +4,7 @@ import 'dotenv/config';
 import { Repository } from '../data/repo.js';
 import { authors } from './authors.js';
 import { getData, slugify } from './openLibraryApi.js';
+import { toNormalizedTitleCase } from '../frontend/common.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PUBLIC=resolve(__dirname, '../..', 'public');
@@ -24,8 +25,8 @@ async function importAuthorData(repository, data) {
         author = await repository.createAuthor({
           props: {
             key,
-            slug,
-            name: item.name,
+            slug: slug.normalize('NFC'),
+            name: toNormalizedTitleCase(item.name),
             bio,
             picture: item.picture,
           },

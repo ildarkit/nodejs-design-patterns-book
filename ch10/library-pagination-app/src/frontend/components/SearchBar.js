@@ -1,13 +1,14 @@
 import { html } from 'htm/react';
 import { Link } from 'react-router-dom';
 import { useSessionStorage } from '../session.js';
+import { toNormalizedTitleCase } from '../common.js';
 
 export function SearchForm({ handleData }) {
   const [ query, setQuery ] = useSessionStorage('queryAuthors', '');
 
   function onSubmit(event) {
     event.preventDefault();
-    handleData(event.target.q.value);
+    handleData(toNormalizedTitleCase(event.target.q.value));
   }
 
   function onChange(event) {

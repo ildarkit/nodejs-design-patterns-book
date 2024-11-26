@@ -1,0 +1,19 @@
+{
+  "name": "batching-caching-callback",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "level": "^8.0.1",
+    "level-read-stream": "^1.1.1"
+  },
+  "devDependencies": {
+    "nanoid": "^5.0.8"
+  }
+}

@@ -16,7 +16,7 @@ export function totalSales(product, cb) {
       }
     })
     .on('end', () => {
+      console.log(`totalSales() took: ${Date.now() - now}ms`);
       cb(sum);
     });
-  console.log(`totalSales() took: ${Date.now() - now}ms`);
 }

@@ -6,7 +6,7 @@ const cache = new Map();
 export function totalSales(product, cb) {
   if (cache.has(product)) {
     console.log('Cache hit');
-    return cb(cache.get(product));
+    return process.nextTick(() => cb(cache.get(product)));
   }
 
   totalSalesOriginal(product, (sum) => {

@@ -4,14 +4,19 @@ import { ValueStream } from 'level-read-stream';
 const db = new Level('example-db', { valueEncoding: 'json' });
 const salesDb = db.sublevel('sales', { valueEncoding: 'json' });
 
-export async function totalSales (product) {
+export function totalSales(product, cb) {
   const now = Date.now();
   let sum = 0;
-  for await (const transaction of new ValueStream(salesDb)) {
-    if (!product || transaction.product === product) {
-      sum += transaction.amount;
-    }
-  }
+  new ValueStream(salesDb)
+    .on('readable', function() {
+      let data;
+      while ((data = this.read()) !== null) {
+        if (!product || data.product === product)
+          sum += data.amount; 
+      }
+    })
+    .on('end', () => {
+      cb(sum);
+    });
   console.log(`totalSales() took: ${Date.now() - now}ms`);
-  return sum;
 }

@@ -8,15 +8,20 @@ app.use(express.json());
 
 app.post('/', function(req, res) {
   const functionName = req.body.functionName;
-  const args = req.body.args;
-  const pool = new WorkerPool();
-  pool.on('end', (data) => {
+  const args = req.body.args; 
+  const workers = new WorkerPool();
+  workers.on('end', (data) => {
+    console.log(
+      new Date().toISOString(),
+      `[INFO] ${data.code || 200}`,
+      `response to the client ${req.hostname}`
+    );
     res.status(data.code || 200).json(data);
   });
-  pool.start({ functionName, args });
+  workers.start({ functionName, args });
 });
 
 app.listen(
   3000,
-  () => console.log('Server started at localhost:3000'),
+  () => console.log('Server listening on localhost:3000'),
 );

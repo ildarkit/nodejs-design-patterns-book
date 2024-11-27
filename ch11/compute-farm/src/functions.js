@@ -1,4 +1,4 @@
-function subsetSum(set, sum) {
+function subsetSum({ set, sum }) {
   const subsets = [];
 
   function findSubsets(set, subset, sum) {
@@ -9,7 +9,8 @@ function subsetSum(set, sum) {
 
       const result = newSubset.reduce(
         (prev, item) => prev + item, 0);
-      if (result === sum) subsets.push(newSubset);
+      if (result === sum) 
+        subsets.push(newSubset);
     }
   }
 

@@ -2,7 +2,7 @@ import { CancelError } from './cancelError.js';
 
 export function createAsyncCancelable(generatorFunction) {
   return function asyncCancelable(...args) {
-    const generatorObject = generatorFunction(...args);
+    const generator = generatorFunction(...args);
     let cancelRequested = false;
 
     function cancel() {
@@ -20,10 +20,10 @@ export function createAsyncCancelable(generatorFunction) {
         }
 
         try {
-          nextStep(generatorObject.next(await prevResult.value));
+          nextStep(generator.next(await prevResult.value));
         } catch (err) {
           try {
-            nextStep(generatorObject.throw(err));
+            nextStep(generator.throw(err));
           } catch (err2) {
             reject(err2);
           }
@@ -33,6 +33,6 @@ export function createAsyncCancelable(generatorFunction) {
       nextStep({});
     })
 
-    return { promise, cancel };
+    return { promise, cancel, generator };
   }
 }

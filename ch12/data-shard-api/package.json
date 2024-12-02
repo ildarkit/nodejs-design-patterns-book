@@ -6,7 +6,11 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "loadBalancer": "node src/loadBalancer.js"
+    "start:loadBalancer": "forever start --killSignal=SIGINT src/loadBalancer.js",
+    "start:consul": "consul agent --dev",
+    "start:apps": "forever start -f --killSignal=SIGINT src/app.js a-d-api-service && forever start -f --killSignal=SIGINT src/app.js a-d-api-service && forever start -f --killSignal=SIGINT src/app.js e-p-api-service forever start -f --killSignal=SIGINT src/app.js e-p-api-service && forever start -f --killSignal=SIGINT src/app.js q-z-api-service && forever start -f --killSignal=SIGINT src/app.js q-z-api-service",
+    "stop": "forever stopall",
+    "benchmark": "autocannon -c 200 -d 10 http://localhost:8080"
   },
   "keywords": [],
   "author": "",
@@ -14,11 +18,13 @@
   "dependencies": {
     "consul": "^2.0.1",
     "express": "^4.21.1",
+    "forever": "^4.0.3",
     "http-proxy": "^1.18.1",
     "nanoid": "^5.0.9",
     "portfinder": "^1.0.32"
   },
   "devDependencies": {
-    "@faker-js/faker": "^9.2.0"
+    "@faker-js/faker": "^9.2.0",
+    "autocannon": "^8.0.0"
   }
 }

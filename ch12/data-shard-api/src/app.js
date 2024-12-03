@@ -1,10 +1,24 @@
+import fs from 'node:fs';
 import express from 'express';
 import consul from 'consul';
 import portfinder from 'portfinder';
 import { nanoid } from 'nanoid';
 
 const serviceType = process.argv[2];
+const dbStringConnect = `${serviceType}-data.json`;
 const { pid } = process;
+
+function connect(path, cb) {
+  fs.readFile(path, function (err, data) {
+    if (err) return cb(err);
+    data = JSON.parse(data);
+    cb(null, data);
+  });
+}
+
+function findAll(db, cb) {
+  return db.filter(cb);
+}
 
 async function main () {
   const consulClient = consul();
@@ -43,8 +57,23 @@ async function main () {
   app.use(express.json());
 
   app.get('/api/people/byFirstName/:letter', (req, res) => {
-    console.log(`Handling request from ${pid}`)
-    res.end(`${serviceType} response from ${pid}\n`)
+    console.log(`Handling request from ${pid}`);
+    const nameLetter = req.params.letter;
+
+    connect(dbStringConnect, function(err, data) {
+      if (err) console.error(err);
+
+      const result = findAll(data, (record) => {
+        const nameComponents = record.fullname.split(' ');
+        const firstName = nameComponents[0].includes('.') ?
+          nameComponents[1] : nameComponents[0];
+        return firstName.charAt(0) === nameLetter.toLocaleUpperCase();
+      });
+
+      res.json(result);
+    });
+
+    res.end(`${serviceType} response from ${pid}\n`);
   })
 
   app.listen(port, address, () => {
@@ -56,4 +85,4 @@ async function main () {
 main().catch((err) => {
   console.error(err);
   process.exit(1);
-})
+});

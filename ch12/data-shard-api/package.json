@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:loadBalancer": "forever start --killSignal=SIGINT src/loadBalancer.js",
     "start:consul": "consul agent --dev",
-    "start:apps": "forever start -f --killSignal=SIGINT src/app.js a-d-api-service && forever start -f --killSignal=SIGINT src/app.js a-d-api-service && forever start -f --killSignal=SIGINT src/app.js e-p-api-service forever start -f --killSignal=SIGINT src/app.js e-p-api-service && forever start -f --killSignal=SIGINT src/app.js q-z-api-service && forever start -f --killSignal=SIGINT src/app.js q-z-api-service",
+    "start:app": "forever start -f --killSignal=SIGTERM src/app/app.js a-d-api-service",
+    "start:apps": "forever start -f --killSignal=SIGINT src/app/app.js a-d-api-service && forever start -f --killSignal=SIGINT src/app/app.js a-d-api-service && forever start -f --killSignal=SIGINT src/app/app.js e-p-api-service forever start -f --killSignal=SIGINT src/app/app.js e-p-api-service && forever start -f --killSignal=SIGINT src/app/app.js q-z-api-service && forever start -f --killSignal=SIGINT src/app/app.js q-z-api-service",
     "stop": "forever stopall",
     "benchmark": "autocannon -c 200 -d 10 http://localhost:8080"
   },

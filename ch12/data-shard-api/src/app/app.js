@@ -30,8 +30,6 @@ function startApp(port, address, cb) {
 
       res.json(result);
     });
-
-    res.end(`${serviceType} response from ${pid}\n`);
   })
 
   app.listen(port, address, cb);

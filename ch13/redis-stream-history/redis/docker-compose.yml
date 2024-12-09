@@ -1,0 +1,11 @@
+services:
+  message:
+    build: .
+    ports:
+      - "6379:6379"
+    networks:
+      - message-backend
+
+networks:
+  message-backend:
+    driver: bridge

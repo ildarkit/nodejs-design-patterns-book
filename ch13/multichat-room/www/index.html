@@ -33,8 +33,9 @@
 
       const select = document.getElementById('chats');
       select.addEventListener('change', event => {
+        document.getElementById('messages').replaceChildren();
         const chat = event.target.value;
-        ws.send({ chat });
+        ws.send(JSON.stringify({ chat }));
       });
 
       const form = document.getElementById('msgForm');

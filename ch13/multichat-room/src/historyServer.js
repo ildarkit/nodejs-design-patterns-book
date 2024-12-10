@@ -28,16 +28,6 @@ function bufferToStream(binary) {
   });
 }
 
-function isJsonString(str) {
-  try {
-    JSON.parse(str);
-  } catch (e) {
-    return false;
-  }
-  return true;
-}
-
-
 class ChatStream extends Transform {
   constructor(chat, options) {
     super({ ...options, objectMode: true });
@@ -45,12 +35,10 @@ class ChatStream extends Transform {
   }
 
   _transform(chunk, encoding, cb) {
-    const value = chunk.value.toString();
-    if (isJsonString(value)) {
-      const parsed = JSON.parse(value);
-      parsed.chad === this.chad && cb(null, chunk);
-      return;
-    }
+    const key = chunk.key.toString();
+    const value = chunk.value.toString().split(','); 
+    if (value[0] === key && value[1] === this.chat)
+      return cb(null, Buffer.from(value[2]));
     cb();
   }
 }
@@ -65,7 +53,6 @@ async function main(db, port, address) {
 
   app.get('/messages/:chat', async (req, res) => {
     const chat = req.params.chat;
-    console.log(`chat: ${chat}`);
     lastRecordTimestamp = await getLastTimestamp(db);
 
     db.createReadStream({ gte: lastRecordTimestamp })
@@ -86,12 +73,10 @@ async function main(db, port, address) {
   });
 
   app.post('/message/add', async (req, res) => {
+    const ts = timestamp();
     await db.put(
-      timestamp(),
-      { 
-        chat: req.body.chat,
-        message: req.body.message
-      }
+      ts,
+      [ ts, req.body.chat, req.body.message ]
     );
     res.end();
   });

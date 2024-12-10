@@ -16,6 +16,7 @@
       );
 
       ws.onmessage = function (message) {
+        console.log(message.data);
         if (message.data.startsWith('chats:')) {
           const chats = message.data.split('chats:')[1].split(',');
           for (const chat of chats) {

@@ -5,6 +5,7 @@ import WebSocket, { WebSocketServer } from 'ws';
 import Redis from 'ioredis';
 import superagent from 'superagent';
 import JSONStream from 'JSONStream';
+import { isJsonString } from './helpers.js';
 
 const historyHost = 'http://localhost:8090';
 
@@ -27,6 +28,7 @@ wss.on('connection', client => {
 
   client.on('message', async (msg) => {
     const chatMsg = JSON.parse(msg);
+    client.chat = chatMsg.chat;
     if (chatMsg.message) {
       console.log(`Message from chat '${chatMsg.chat}': ${chatMsg.message}`);
       await superagent
@@ -57,7 +59,11 @@ function loadData(url, client) {
 function broadcast (msg) {
   for (const client of wss.clients) {
     if (client.readyState === WebSocket.OPEN) {
-      client.send(msg);
+      const data = isJsonString(msg) ? JSON.parse(msg) : msg;
+      if (data.chat && data.chat === client.chat)
+        client.send(data.message);
+      else if (!data.chat)
+        client.send(data);
     }
   }
 }

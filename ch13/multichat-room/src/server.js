@@ -17,29 +17,40 @@ const redisClientXRead = new Redis(options);
 
 const server = createServer((req, res) => {
   return staticHandler(req, res, { public: 'www' });
-})
+});
 
 const wss = new WebSocketServer({ server });
 wss.on('connection', client => {
   console.log('Client connected');
 
   client.on('message', async (msg) => {
-    console.log(`Message: ${msg}`);
-    await superagent
-      .post('http://localhost:8090')
-      .send({ message: msg.toString() });
-    redisClient.xadd('chat_stream', '*', 'message', msg);
+    const chatMsg = JSON.parse(msg);
+    if (chatMsg.message) {
+      console.log(`Message from chat '${chatMsg.chat}': ${chatMsg.message}`);
+      await superagent
+        .post('http://localhost:8090')
+        .send({ chat: chatMsg.chat, message: chatMsg.message });
+      redisClient.xadd('chat_stream', '*', 'message', msg);
+    }
+    else {
+      console.log(`Current chat '${chatMsg.chat}'`);
+      loadData('http://localhost:8090', client);
+    } 
   });
 
-  // Load message history
+  loadData('http://localhost:8090/chats', client); 
+});
+
+function loadData(url, client) {
   superagent
-    .get('http://localhost:8090')
+    .get(url)
     .on('error', err => console.error(err))
     .pipe(JSONStream.parse('*'))
     .on('data', msg => {
-      client.send(msg.value, { binary: false })
+      const message = msg.value ? msg.value : msg;
+      client.send(message, { binary: false });
     });
-});
+}
 
 function broadcast (msg) {
   for (const client of wss.clients) {

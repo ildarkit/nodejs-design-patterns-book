@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
   <body>
+    <select id="chats">
+    </select>
+    <br/>
     Messages:
     <div id="messages"></div>
     <form id="msgForm">
@@ -11,17 +14,36 @@
       const ws = new WebSocket(
         `ws://${window.document.location.host}`
       );
+
       ws.onmessage = function (message) {
-        const msgDiv = document.createElement('div');
-        msgDiv.innerHTML = message.data;
-        document.getElementById('messages').appendChild(msgDiv);
+        if (message.data.startsWith('chats:')) {
+          const chats = message.data.split('chats:')[1].split(',');
+          for (const chat of chats) {
+            const opt = document.createElement('option');
+            opt.innerHTML = chat;
+            document.getElementById('chats').appendChild(opt);
+          }
+          chats[0] && ws.send(JSON.stringify({ chat: chats[0] }));
+        } else {
+          const msgDiv = document.createElement('div');
+          msgDiv.innerHTML = message.data;
+          document.getElementById('messages').appendChild(msgDiv);
+        }
       };
+
+      const select = document.getElementById('chats');
+      select.addEventListener('change', event => {
+        const chat = event.target.value;
+        ws.send({ chat });
+      });
+
       const form = document.getElementById('msgForm');
       form.addEventListener('submit', (event) => {
         event.preventDefault();
+        const chat = document.getElementById('chats').value;
         const message = document.getElementById('msgBox').value;
         if (message) {
-          ws.send(message);
+          ws.send(JSON.stringify({ chat, message }));
           document.getElementById('msgBox').value = '';
         }
       });

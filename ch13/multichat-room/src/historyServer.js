@@ -3,6 +3,7 @@ import levelup from 'levelup';
 import leveldown from 'leveldown';
 import JSONStream from 'JSONStream';
 import timestamp from 'monotonic-timestamp';
+import { Readable } from 'node:stream';
 
 async function getLastTimestamp(db) {
   return await db.get('-1').catch(e => {
@@ -18,7 +19,16 @@ async function saveLastTimestamp(db, value, lastValue) {
   }
 }
 
-async function main (db, port, address) {
+function bufferToStream(binary) {
+  return new Readable({
+    read() {
+      this.push(binary);
+      this.push(null);
+    }
+  });
+}
+
+async function main(db, port, address) {
   let lastChunkKey;
   let lastRecordTimestamp;
   const app = express();
@@ -33,6 +43,16 @@ async function main (db, port, address) {
       .on('data', chunk => lastChunkKey = chunk.key) 
       .pipe(JSONStream.stringify())
       .pipe(res); 
+  });
+
+  app.get('/chats', async (req, res) => {
+    const chats = await db.get('chats').catch(e => {
+      if (!e.notFount) console.error(e);
+      return Buffer.alloc(0);
+    });
+    bufferToStream(Buffer.concat([Buffer.from('chats:', 'utf8'), chats]))
+      .pipe(JSONStream.stringify())
+      .pipe(res);
   });
 
   app.post('/', async (req, res) => {

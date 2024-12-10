@@ -3,7 +3,7 @@ import levelup from 'levelup';
 import leveldown from 'leveldown';
 import JSONStream from 'JSONStream';
 import timestamp from 'monotonic-timestamp';
-import { Readable } from 'node:stream';
+import { Readable, Transform } from 'node:stream';
 
 async function getLastTimestamp(db) {
   return await db.get('-1').catch(e => {
@@ -28,6 +28,33 @@ function bufferToStream(binary) {
   });
 }
 
+function isJsonString(str) {
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+  return true;
+}
+
+
+class ChatStream extends Transform {
+  constructor(chat, options) {
+    super({ ...options, objectMode: true });
+    this.chat = chat;
+  }
+
+  _transform(chunk, encoding, cb) {
+    const value = chunk.value.toString();
+    if (isJsonString(value)) {
+      const parsed = JSON.parse(value);
+      parsed.chad === this.chad && cb(null, chunk);
+      return;
+    }
+    cb();
+  }
+}
+
 async function main(db, port, address) {
   let lastChunkKey;
   let lastRecordTimestamp;
@@ -36,10 +63,13 @@ async function main(db, port, address) {
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
 
-  app.get('/', async (req, res) => {
+  app.get('/messages/:chat', async (req, res) => {
+    const chat = req.params.chat;
+    console.log(`chat: ${chat}`);
     lastRecordTimestamp = await getLastTimestamp(db);
 
     db.createReadStream({ gte: lastRecordTimestamp })
+      .pipe(new ChatStream(chat))
       .on('data', chunk => lastChunkKey = chunk.key) 
       .pipe(JSONStream.stringify())
       .pipe(res); 
@@ -55,8 +85,14 @@ async function main(db, port, address) {
       .pipe(res);
   });
 
-  app.post('/', async (req, res) => {
-    await db.put(timestamp(), req.body.message);
+  app.post('/message/add', async (req, res) => {
+    await db.put(
+      timestamp(),
+      { 
+        chat: req.body.chat,
+        message: req.body.message
+      }
+    );
     res.end();
   });
 

@@ -6,6 +6,8 @@ import Redis from 'ioredis';
 import superagent from 'superagent';
 import JSONStream from 'JSONStream';
 
+const historyHost = 'http://localhost:8090';
+
 const options = {
   host: process.env.REDIS_HOST,
   port: Number(process.env.REDIS_PORT),
@@ -28,17 +30,17 @@ wss.on('connection', client => {
     if (chatMsg.message) {
       console.log(`Message from chat '${chatMsg.chat}': ${chatMsg.message}`);
       await superagent
-        .post('http://localhost:8090')
+        .post(`${historyHost}/message/add`)
         .send({ chat: chatMsg.chat, message: chatMsg.message });
       redisClient.xadd('chat_stream', '*', 'message', msg);
     }
     else {
       console.log(`Current chat '${chatMsg.chat}'`);
-      loadData('http://localhost:8090', client);
+      loadData(`${historyHost}/messages/${chatMsg.chat}`, client);
     } 
   });
 
-  loadData('http://localhost:8090/chats', client); 
+  loadData(`${historyHost}/chats`, client); 
 });
 
 function loadData(url, client) {

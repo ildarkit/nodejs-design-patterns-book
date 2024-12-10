@@ -27,8 +27,11 @@ const wss = new WebSocketServer({ server });
 wss.on('connection', client => {
   console.log('Client connected');
 
-  client.on('message', msg => {
+  client.on('message', async (msg) => {
     console.log(`Message: ${msg}`);
+    await superagent
+      .post('http://localhost:8090')
+      .send({ message: msg.toString() });
     redisClient.xadd('chat_stream', '*', 'message', msg);
   });
 
@@ -37,7 +40,9 @@ wss.on('connection', client => {
     .get('http://localhost:8090')
     .on('error', err => console.error(err))
     .pipe(JSONStream.parse('*'))
-    .on('data', msg => client.send(msg, { binary: false }));
+    .on('data', msg => {
+      client.send(msg.value, { binary: false })
+    });
 });
 
 function broadcast (msg) {
@@ -55,10 +60,7 @@ async function processStreamMessages() {
     const [[, records]] = await redisClientXRead.xread(
       'BLOCK', '0', 'STREAMS', 'chat_stream', lastRecordId);
     for (const [recordId, [, message]] of records) {
-      console.log(`Message from stream: ${message}`);
-      await superagent
-        .post('http://localhost:8090')
-        .send({ recordId, message });
+      console.log(`Message from stream: ${message}`); 
       broadcast(message);
       lastRecordId = recordId;
     }

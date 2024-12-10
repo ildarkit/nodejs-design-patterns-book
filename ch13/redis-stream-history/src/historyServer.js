@@ -2,28 +2,56 @@ import express from 'express';
 import levelup from 'levelup';
 import leveldown from 'leveldown';
 import JSONStream from 'JSONStream';
+import timestamp from 'monotonic-timestamp';
+
+async function getLastTimestamp(db) {
+  return await db.get('-1').catch(e => {
+    if (!e.notFount) console.error(e);
+    return 0;
+  });
+}
+
+async function saveLastTimestamp(db, value, lastValue) {
+  const newValue = value ? Number(value.toString()) : NaN;
+  if (!Number.isNaN(newValue) && newValue !== lastValue) {
+    await db.put('-1', newValue);
+  }
+}
 
 async function main (db, port, address) {
+  let lastChunkKey;
+  let lastRecordTimestamp;
   const app = express();
 
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
 
-  app.get('/', (req, res) => {
-    db.createValueStream()
+  app.get('/', async (req, res) => {
+    lastRecordTimestamp = await getLastTimestamp(db);
+
+    db.createReadStream({ gte: lastRecordTimestamp })
+      .on('data', chunk => lastChunkKey = chunk.key) 
       .pipe(JSONStream.stringify())
-      .pipe(res);
+      .pipe(res); 
   });
 
   app.post('/', async (req, res) => {
-    console.log(`Saving message to persistent storage: ${req.body.recordId}`);
-    await db.put(req.body.recordId, req.body.message);
+    await db.put(timestamp(), req.body.message);
     res.end();
   });
 
-  app.listen(port, address, () => {
-    console.log(`Chat logging started at ${address}:${port}`);
+  const server = app.listen(port, address, () => {
+    console.log(`History server started at ${address}:${port}`);
   });
+
+  const shutDown = async () => {
+    console.log('\nClosing HTTP server...');
+    await saveLastTimestamp(db, lastChunkKey, lastRecordTimestamp); 
+    server.close(() => console.log('Server closed'));
+  };
+
+  process.on('SIGTERM', shutDown);
+  process.on('SIGINT', shutDown);
 }
 
 const port = 8090;

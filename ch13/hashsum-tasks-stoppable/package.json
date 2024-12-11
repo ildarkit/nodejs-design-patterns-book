@@ -1,0 +1,20 @@
+{
+  "name": "hashsum-tasks-stoppable",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:worker": "node src/worker.js",
+    "start:collector": "node src/collector.js",
+    "start:producer": "node src/producer.js 4 f8e966d1e207d02c44511a58dccff2f5429e9a3b"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.10.5",
+    "indexed-string-variation": "^1.0.3"
+  }
+}

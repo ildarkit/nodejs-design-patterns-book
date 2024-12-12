@@ -8,18 +8,16 @@ const BATCH_SIZE = 10000;
 const [, , maxLength, searchHash] = process.argv;
 
 async function main () {
-  const ventilator = new zmq.Push();
-  const confirmer = new zmq.Dealer();
-
-  await ventilator.bind('tcp://*:5016');
-  await confirmer.bind('tcp://*:5018');
-
-  const queue = new TaskQueue(confirmer, ventilator);
+  const ventilator = new zmq.Dealer();
+  const queue = new TaskQueue(ventilator);
   const generatorObj = generateTasks(searchHash, ALPHABET,
     maxLength, BATCH_SIZE);
+
+  await ventilator.bind('tcp://*:5016');
+
   for (const task of generatorObj) {
     await queue.send(JSON.stringify(task));
-  }
+  } 
 }
 
 main().catch(err => console.error(err));

@@ -6,8 +6,7 @@ export class TaskQueue {
   max;
   sending = false;
 
-  constructor(confirmer, sender, max = 100) {
-    this.confirmer = confirmer;
+  constructor(sender, max = 100) {
     this.sender = sender;
     this.max = max;
   }
@@ -28,8 +27,9 @@ export class TaskQueue {
 
     while (this.queue.size) {
       await this.sender.send(this.queue.peek());
-      const [msg] = await this.confirmer.receive();
+      const [msg] = await this.sender.receive();
       if (msg.length === 0) this.queue.dequeue();
+      else break;
     }
 
     this.sending = false;

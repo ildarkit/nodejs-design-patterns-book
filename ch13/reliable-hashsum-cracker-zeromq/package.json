@@ -14,8 +14,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "delay": "^6.0.0",
     "indexed-string-variation": "^1.0.3",
+    "yocto-queue": "^1.1.1",
     "zeromq": "^6.1.2"
   }
 }
